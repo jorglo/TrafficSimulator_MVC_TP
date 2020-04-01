@@ -6,8 +6,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -17,6 +21,7 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+import simulator.view.MainWindow;
 import simulator.control.Controller;
 import simulator.factories.Builder;
 import simulator.factories.BuilderBasedFactory;
@@ -41,11 +46,12 @@ import simulator.model.TrafficSimulator;
 
 public class Main {
 
-	private final static Integer _timeLimitDefaultValue = 10;
-	private static Integer _timeLimit = null; 
-	private static String _inFile = null;
-	private static String _outFile = null;
-	private static Factory<Event> _eventsFactory = null;
+	private final static Integer _timeLimitDefaultValue = 10;	//limite de pasos por defecto
+	private static Integer _timeLimit = null; 					//limite de pasos
+	private static String _inFile = null;						//fichero de entrada
+	private static String _outFile = null;						//fichero de salida
+	private static Factory<Event> _eventsFactory = null;		//factoria de eventos
+	private static boolean _guiMode; 							//modo de juego
 
 	private static void parseArgs(String[] args) {
 
@@ -59,6 +65,7 @@ public class Main {
 		try {
 			CommandLine line = parser.parse(cmdLineOptions, args);
 			parseHelpOption(line, cmdLineOptions);
+			parseSimulationMode(line);
 			parseInFileOption(line);
 			parseOutFileOption(line);
 			parseTicksOption(line);
@@ -89,6 +96,7 @@ public class Main {
 				Option.builder("o").longOpt("output").hasArg().desc("Output file, where reports are written.").build());
 		cmdLineOptions.addOption(Option.builder("h").longOpt("help").desc("Print this message").build());
 		cmdLineOptions.addOption(Option.builder("t").longOpt("ticks").hasArg().desc("Ticks").build());
+		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg().desc("Mode").build());
 
 		return cmdLineOptions;
 	}
@@ -103,9 +111,9 @@ public class Main {
 
 	private static void parseInFileOption(CommandLine line) throws ParseException {
 		_inFile = line.getOptionValue("i");
-		if (_inFile == null) {
-			throw new ParseException("An events file is missing");
-		}
+//		if (_inFile == null) {
+//			throw new ParseException("An events file is missing");
+//		}
 	}
 
 	private static void parseOutFileOption(CommandLine line) throws ParseException {
@@ -117,6 +125,24 @@ public class Main {
 			_timeLimit = _timeLimitDefaultValue;
 		else
 		_timeLimit =Integer.parseInt(line.getOptionValue("t"));
+	}
+	
+	private static void parseSimulationMode(CommandLine line) throws ParseException {
+		String modeArg = line.getOptionValue("m");
+		//si hay opciones... 
+		if(modeArg != null) {
+			try {
+				//determina que una de las dos condiciones debe ser cierta
+				assert (modeArg.equalsIgnoreCase("console") || modeArg.equalsIgnoreCase("gui"));
+				//si es guiMode...
+				if(modeArg.equalsIgnoreCase("gui")) _guiMode = true;
+			}catch(Exception e) {
+				throw new ParseException("Invalid argument for mode");
+			}
+		}
+		//por defecto...
+		else
+			 _guiMode = true;
 	}
 
 	private static void initFactories() {
@@ -143,28 +169,71 @@ public class Main {
 	}
 
 	private static void startBatchMode() throws IOException {
-		TrafficSimulator simulator;
 		
+		//si la ruta del fichero es nula... ERROR!
 		if (_inFile == null) {
 			System.err.println("An events file is missing");
 			System.exit(-1);
 		}
 		
+		//instanciamos el fichero de entrada
 		InputStream inputStream = new FileInputStream(new File(_inFile));
+		//instanciamos el fichero de salida
 		OutputStream outputStream = (_outFile != null)? new FileOutputStream(_outFile) : System.out;
-		simulator = new TrafficSimulator();
+		//instanciamos el simulador
+		TrafficSimulator simulator = new TrafficSimulator();
+		//tomamos el numero de paso de simulacion
 		int ticks = (_timeLimit != null)? _timeLimit : _timeLimitDefaultValue;
+		//instanciamos el controlador
 		Controller controller = new Controller(simulator, _eventsFactory);
+		//cargamos los eventos
 		controller.loadEvents(inputStream);
+		//corremos la simulacion
 		controller.run(ticks, outputStream);
+		//cerramos el fichero de ENTRADA
 		inputStream.close();
+		//cerramos el fichero de SALIDA
 		outputStream.close();
+	}
+	
+	private static void startGUIMode() throws IOException {
+		//instanciamos el simulador
+		TrafficSimulator simulator = new TrafficSimulator();
+		//instanciamos el controlador al que le pasamos el simulador y los pasos de simulacion
+		Controller controller = new Controller(simulator, _eventsFactory);
+		
+		if(_inFile != null) {
+			//instanciamos el fichero de entrada
+			InputStream inputStream = new FileInputStream(new File(_inFile));
+			//cargamos los eventos
+			controller.loadEvents(inputStream);
+		}
+		//crea una apariencia especificando el nombre de la clase.
+		try { 
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); 
+			} 
+		catch (Exception e) { e.printStackTrace(); }
+		
+		//crea la ventana principal
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+			@Override
+			public void run() {
+				new MainWindow(controller);
+			}
+		});
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}	
 	}
 
 	private static void start(String[] args) throws IOException {
 		initFactories();
 		parseArgs(args);
-		startBatchMode();
+		if(_guiMode) startGUIMode();
+		else startBatchMode();
 	}
 
 	// example command lines:
