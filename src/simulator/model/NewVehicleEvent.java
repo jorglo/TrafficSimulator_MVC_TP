@@ -5,7 +5,6 @@ import java.util.List;
 
 public class NewVehicleEvent extends Event{
 	
-	private String _id;
 	private int _maxSpeed;
 	private int _contClass;
 	private List<String> _itinerary;
@@ -31,6 +30,11 @@ public class NewVehicleEvent extends Event{
 		map.addVehicle(vehicleEvent);
 		
 		vehicleEvent.moveToNextRoad();
+	}
+	
+	@Override
+	public String toString() {
+	return "New Vehicle '" + _id + "'" ;
 	}
 	
 }

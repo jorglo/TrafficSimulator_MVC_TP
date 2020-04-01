@@ -3,6 +3,7 @@ package simulator.model;
 public abstract class Event implements Comparable<Event> {
 
 	protected int _time;
+	protected String _id;
 
 	Event(int time) {
 		if (time < 1)

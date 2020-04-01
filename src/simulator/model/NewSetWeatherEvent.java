@@ -7,7 +7,7 @@ import simulator.misc.Pair;
 
 public class NewSetWeatherEvent extends Event{
 
-	protected List<Pair<String, Weather>> _ws;
+	private List<Pair<String, Weather>> _ws;
 	
 	public NewSetWeatherEvent(int time, List<Pair<String, Weather>> ws) {
 		super(time);
@@ -22,6 +22,11 @@ public class NewSetWeatherEvent extends Event{
 				throw new SimulatorError("La carretera no existe en el mapa de carreteras.");
 			map.getRoad(w.getFirst()).setWeatherConditions(w.getSecond());
 		}
-		
 	}
+	
+	@Override
+	public String toString() {
+		return "New Set Weather Event '" + _id + "'" ;
+	}
+	
 }

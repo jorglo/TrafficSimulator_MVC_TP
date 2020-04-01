@@ -8,7 +8,7 @@ import simulator.misc.Pair;
 
 public class NewSetContClassEvent extends Event{
 	
-	protected List<Pair<String, Integer>> _cs;
+	private List<Pair<String, Integer>> _cs;
 
 	public NewSetContClassEvent(int time, List<Pair<String, Integer>> cs) {
 		super(time);
@@ -25,4 +25,10 @@ public class NewSetContClassEvent extends Event{
 			map.getVehicle(c.getFirst()).setContaminationClass(c.getSecond());
 		}
 	}
+	
+	@Override
+	public String toString() {
+	return "New Set Cont Class '" + _id + "'" ;
+	}
+	
 }

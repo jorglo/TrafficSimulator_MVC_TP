@@ -8,16 +8,18 @@ import org.json.JSONObject;
 import simulator.error.ExecutionException;
 import simulator.misc.SortedArrayList;
 
-public class TrafficSimulator {
+public class TrafficSimulator implements Observable<TrafficSimObserver>, TrafficSimObserver{
 	
-	private RoadMap mapRoad;
-	private List<Event> listEvent;
-	private int simulationTime;
+	private RoadMap _roadMap;
+	private List<Event> _eventsList;
+	private int _simulationTime;
+	private List<TrafficSimObserver> _observersList;
 	
 	public TrafficSimulator() {
-		this.mapRoad = new RoadMap();
-		this.listEvent = new SortedArrayList<Event>();
-		this.simulationTime = 0;
+		_roadMap = new RoadMap();
+		_eventsList = new SortedArrayList<Event>();
+		_simulationTime = 0;
+		_observersList = new ArrayList<TrafficSimObserver>();
 	}
 	
 	/**
@@ -25,17 +27,19 @@ public class TrafficSimulator {
 	 * @param e
 	 */
 	public void addEvent(Event e){		
-		this.listEvent.add(e);
+		_eventsList.add(e);
 	}
 	
 	/**
 	 * avanza el estado de la simulacion
 	 */
 	public void advance(){
-		this.simulationTime++;
+		_simulationTime++;
+		onAdvanceStart(_roadMap, _eventsList, _simulationTime);
 		executeEvents();
-		mapRoad.advanceJuntion(this.simulationTime);
-		mapRoad.advanceRoad(this.simulationTime);
+		_roadMap.advanceJuntion(_simulationTime);
+		_roadMap.advanceRoad(_simulationTime);
+		onAdvanceEnd(_roadMap, _eventsList, _simulationTime);
 	}
 	
 	/**
@@ -45,37 +49,79 @@ public class TrafficSimulator {
 	 */
 	private void executeEvents() {
 		ArrayList<Event> eventsToRemove = new ArrayList<>();
-		for (Event event : listEvent) {
+		for (Event event : _eventsList) {
 			try {
-				if(event._time == this.simulationTime) {
-					event.execute(mapRoad);
+				if(event._time == _simulationTime) {
+					event.execute(_roadMap);
 					eventsToRemove.add(event);
+					onEventAdded(_roadMap, _eventsList, event, _simulationTime);
 				}
 			}catch(ExecutionException e) {
-				listEvent.removeAll(eventsToRemove);
+				onError(e.getMessage());
+				_eventsList.removeAll(eventsToRemove);
 				throw e;
 			}
 		}
 		//elimina los eventos ejecutados
-		listEvent.removeAll(eventsToRemove);
+		_eventsList.removeAll(eventsToRemove);
 	}
 	
 	public void reset() {
-		this.listEvent.clear();
-		this.mapRoad = null;
-		this.simulationTime = 0;
+		_eventsList.clear();
+		_roadMap = null;
+		_simulationTime = 0;
+		onReset(_roadMap, _eventsList, _simulationTime);
 	}
 
 	public JSONObject report() {		
-		
 		JSONObject simulator = new JSONObject();
 
-		simulator.put("time", this.simulationTime);
-		simulator.put("state", this.mapRoad.report());
+		simulator.put("time", _simulationTime);
+		simulator.put("state", _roadMap.report());
+		
 		return simulator;
 	}
-	
-	public RoadMap getMapRoad() {
-		return mapRoad;	
+
+	/* - INTERFACE OBSERBABLE - */
+	@Override
+	public void addObserver(TrafficSimObserver o) {
+		_observersList.add(o);
+		onRegister(_roadMap, _eventsList, _simulationTime);
+	}
+
+	@Override
+	public void removeObserver(TrafficSimObserver o) {
+		_observersList.remove(o);
+	}
+
+	/* - INTERFACE TRAFFICOBSERVER - */
+	@Override
+	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
+		
+	}
+
+	@Override
+	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
+		
+	}
+
+	@Override
+	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
+		
+	}
+
+	@Override
+	public void onReset(RoadMap map, List<Event> events, int time) {
+		
+	}
+
+	@Override
+	public void onRegister(RoadMap map, List<Event> events, int time) {
+		
+	}
+
+	@Override
+	public void onError(String err) {
+		
 	}
 }
