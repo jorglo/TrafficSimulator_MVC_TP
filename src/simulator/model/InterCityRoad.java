@@ -10,25 +10,25 @@ public class InterCityRoad extends Road {
 	@Override
 	void reduceTotalContamination() {
 		if(this.getWeatherConditions() == Weather.SUNNY) {
-			this.setTotalContamination((int) (((100.0 - 2) / 100.0 ) * this.getTotalContamination()));
+			this.setTotalContamination((int) (((100.0 - 2) / 100.0 ) * this.getTotalCO2()));
 		}
 		else if(this.getWeatherConditions() == Weather.CLOUDY) {
-			this.setTotalContamination((int) (((100.0 - 3) / 100.0 ) * this.getTotalContamination()));
+			this.setTotalContamination((int) (((100.0 - 3) / 100.0 ) * this.getTotalCO2()));
 		}
 		else if(this.getWeatherConditions() == Weather.RAINY) {
-			this.setTotalContamination((int) (((100.0 - 10) / 100.0 ) * this.getTotalContamination()));
+			this.setTotalContamination((int) (((100.0 - 10) / 100.0 ) * this.getTotalCO2()));
 		}
 		else if(this.getWeatherConditions() == Weather.WINDY) {
-			this.setTotalContamination((int) (((100.0 - 15) / 100.0 ) * this.getTotalContamination()));
+			this.setTotalContamination((int) (((100.0 - 15) / 100.0 ) * this.getTotalCO2()));
 		}
 		else{
-			this.setTotalContamination((int) (((100.0 - 20) / 100.0 ) * this.getTotalContamination()));
+			this.setTotalContamination((int) (((100.0 - 20) / 100.0 ) * this.getTotalCO2()));
 		}
 	}
 
 	@Override
 	void updateSpeedLimit() {
-		if(this.getTotalContamination() > this.getContaminationAlarmLimit()) 
+		if(this.getTotalCO2() > this.getCO2Limit()) 
 			this.setCurrentSpeedLimit((int) (this.getMaxSpeed() * 0.5));
 		else 
 			this.setCurrentSpeedLimit(this.getMaxSpeed());

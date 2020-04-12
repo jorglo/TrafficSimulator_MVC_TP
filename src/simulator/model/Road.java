@@ -45,7 +45,6 @@ public abstract class Road extends SimulatedObject{
 		this.totalContamination = 0;		
 		this.comp = new Com();
 		this.vehicles = new SortedArrayList<Vehicle>(comp);
-		
 	}
 
 	/**
@@ -139,12 +138,12 @@ public abstract class Road extends SimulatedObject{
 	void addContamination(int c) {
 		if(c < 0) 
 			throw new SimulatorError("El valor de la contaminacion no puede ser negativa");
-		setTotalContamination(getTotalContamination() + c);
+		setTotalContamination(getTotalCO2() + c);
 	}
 	
 	// GETERS Y SETERS
 	
-	int getLength() {
+	public int getLength() {
 		return length;
 	}
 
@@ -156,7 +155,7 @@ public abstract class Road extends SimulatedObject{
 		return weatherConditions;
 	}
 
-	public int getTotalContamination() {
+	public int getTotalCO2() {
 		return totalContamination;
 	}
 
@@ -168,7 +167,7 @@ public abstract class Road extends SimulatedObject{
 		return maxSpeed;
 	}
 
-	public int getContaminationAlarmLimit() {
+	public int getCO2Limit() {
 		return contLimit;
 	}
 
@@ -197,7 +196,6 @@ public abstract class Road extends SimulatedObject{
 	abstract void reduceTotalContamination();
 	abstract void updateSpeedLimit();
 	abstract int calculateVehicleSpeed(Vehicle v);
-	
 	
 }
 

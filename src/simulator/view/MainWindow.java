@@ -1,19 +1,24 @@
 package simulator.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 
+import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.TitledBorder;
 
+import simulator.view.table.EventsTableModel;
 import simulator.control.Controller;
+import simulator.view.table.JunctionsTableModel;
+import simulator.view.table.RoadsTableModel;
+import simulator.view.table.VehiclesTableModel;
 
-//TODO: copiada la estructura del guion pero sin implementar.
 public class MainWindow extends JFrame {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private Controller _ctrl;
 
@@ -24,38 +29,66 @@ public class MainWindow extends JFrame {
 	}
 
 	private void initGUI() {
+		
+		//Instanciamos los paneles contenedores
 		JPanel mainPanel = new JPanel(new BorderLayout());
+		JPanel viewsPanel = new JPanel();
+		JPanel tablesPanel = new JPanel();
+		JPanel mapsPanel = new JPanel();
+		
+		//Creamos los componentes
+		JPanel eventsView = createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
+		JPanel vehiclesView = createViewPanel(new JTable(new VehiclesTableModel(_ctrl)), "Vehicles");
+		JPanel roadsView = createViewPanel(new JTable(new RoadsTableModel(_ctrl)), "Roads");
+		JPanel junctionsView = createViewPanel(new JTable(new JunctionsTableModel(_ctrl)), "Junctions");
+		JPanel mapView = createViewPanel(new MapComponent(_ctrl), "Map");
+		JPanel mapByRoadsView = createViewPanel(new MapComponent(_ctrl), "Map By Roads");
+		
+		//Definimos su tipo y organizacion dentro de la ventana
+		viewsPanel.setLayout(new BoxLayout(mapsPanel, BoxLayout.Y_AXIS));
+		tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
+		mapsPanel.setLayout(new BoxLayout(mapsPanel, BoxLayout.Y_AXIS));
+		
+		//Definimos sus dimensiones dentro de la ventana
+		eventsView.setPreferredSize(new Dimension(500, 200));
+		vehiclesView.setPreferredSize(new Dimension(500, 200));
+		junctionsView.setPreferredSize(new Dimension(500, 200));
+		roadsView.setPreferredSize(new Dimension(500, 200));
+		mapView.setPreferredSize(new Dimension(500, 400));
+		mapByRoadsView.setPreferredSize(new Dimension(500, 400));
+		
+		//añadimos los paneles
 		this.setContentPane(mainPanel);
 		mainPanel.add(new ControlPanel(_ctrl), BorderLayout.PAGE_START);
-		mainPanel.add(new StatusBar(_ctrl), BorderLayout.PAGE_END);
-		JPanel viewsPanel = new JPanel(new GridLayout(1, 2));
 		mainPanel.add(viewsPanel, BorderLayout.CENTER);
-		JPanel tablesPanel = new JPanel();
-		tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
+		mainPanel.add(new StatusBar(_ctrl), BorderLayout.PAGE_END);
 		viewsPanel.add(tablesPanel);
-		JPanel mapsPanel = new JPanel();
-		mapsPanel.setLayout(new BoxLayout(mapsPanel, BoxLayout.Y_AXIS));
 		viewsPanel.add(mapsPanel);
-		// tables
-		JPanel eventsView = createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
-		eventsView.setPreferredSize(new Dimension(500, 200));
+		
 		tablesPanel.add(eventsView);
-		// TODO add other tables
-		// ...
-		// maps
-		JPanel mapView = createViewPanel(new MapComponent(_ctrl), "Map");
-		mapView.setPreferredSize(new Dimension(500, 400));
+		tablesPanel.add(vehiclesView);
+		tablesPanel.add(junctionsView);
+		tablesPanel.add(roadsView);
+		
 		mapsPanel.add(mapView);
-		// TODO add a map for MapByRoadComponent
-		// ...
+		mapsPanel.add(mapByRoadsView);
+		
+		//nos permite mostrar fácilmente una ventana para la selección de un fichero
+		
+		
+		//Opciones de la ventana
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.pack();
 		this.setVisible(true);
+		
+		//ventana flotante para la confirmacion de cerrar la ventana
+		
+		
 	}
-
+	
 	private JPanel createViewPanel(JComponent c, String title) {
 		JPanel p = new JPanel(new BorderLayout());
-		// TODO add a framed border to p with title
+		p.setBorder(new TitledBorder(title));
 		p.add(new JScrollPane(c));
 		return p;
 	}

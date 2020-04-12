@@ -1,5 +1,6 @@
 package simulator.model;
 
+import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,9 +26,14 @@ public class Junction extends SimulatedObject
 	private DequeuingStrategy dqStrategy;			// estratedia de tipo DequeuingStrategy
 	
 	// coordenadas para dibujar 
-	// el cruce en la practica 2.
-	private int xCoor;								// coordenada x
-	private int yCoor;								// coordenada y
+	// el cruce en la practica 2 (map).
+	private int _xCoor;								// coordenada x
+	private int _yCoor;								// coordenada y
+	
+	// coordenadas para dibujar 
+	// el cruce en la practica 2 (map).
+	private int _xCoorBR;								// coordenada x
+	private int _yCoorBR;								// coordenada y
 	
 	
 	Junction(String id, LightSwitchingStrategy lsStrategy, DequeuingStrategy dqStrategy, int xCoor, int yCoor) {
@@ -39,8 +45,8 @@ public class Junction extends SimulatedObject
 		this.dqStrategy = dqStrategy;
 		
 		if(xCoor<0 || yCoor<0) System.err.println("Error");
-		this.xCoor = xCoor;
-		this.yCoor = yCoor;
+		_xCoor = xCoor;
+		_yCoor = yCoor;
 		
 		this.greenRoadIndex = -1;
 		this.lastChange = 0;
@@ -67,7 +73,7 @@ public class Junction extends SimulatedObject
 		if(!this.queueForRoad.isEmpty())
 			cola = this.dqStrategy.dequeue(queueForRoad);
 		
-		//de todos los coches que se tienen que mover, seleccionamos lo del semaforo en verde
+		//de todos los coches que se tienen que mover, seleccionamos los del semaforo en verde
 		if(!cola.isEmpty()) {
 							
 			for(Vehicle v: cola) {
@@ -193,5 +199,43 @@ public class Junction extends SimulatedObject
 	public Map<Road,List<Vehicle>> getRoadQueue(){
 		return this.roadQueue;
 	}
+
+	public int getX() {
+		return _xCoor;
+	}
+	
+	public int getY() {
+		return _yCoor;
+	}
+
+	public int getGreenLightIndex() {
+		return this.greenRoadIndex;
+	}
+
+	public RenderingHints getInRoads() {
+		return (RenderingHints) this.incomingRoadsList;
+	}
+
+	public int get_xCoorBR() {
+		return _xCoorBR;
+	}
+
+	public void set_xCoorBR(int _xCoorBR) {
+		this._xCoorBR = _xCoorBR;
+	}
+
+	public int get_yCoorBR() {
+		return _yCoorBR;
+	}
+
+	public void set_yCoorBR(int _yCoorBR) {
+		this._yCoorBR = _yCoorBR;
+	}
+
+	public List<Road> getIncomingRoadsList() {
+		return incomingRoadsList;
+	}
+	
+	
 	
 }

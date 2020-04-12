@@ -12,11 +12,11 @@ public class CityRoad extends Road{
 	void reduceTotalContamination() {
 
 		if(this.getWeatherConditions() == Weather.WINDY || this.getWeatherConditions() == Weather.STORM)
-			this.setTotalContamination(this.getTotalContamination() - 10);
+			this.setTotalContamination(this.getTotalCO2() - 10);
 		else 
-			this.setTotalContamination(this.getTotalContamination() - 2);
+			this.setTotalContamination(this.getTotalCO2() - 2);
 		
-		if(this.getTotalContamination() < 0)
+		if(this.getTotalCO2() < 0)
 			throw new SimulatorError("TotalContamination no puede ser negativo");	
 	}
 
@@ -27,7 +27,7 @@ public class CityRoad extends Road{
 
 	@Override
 	int calculateVehicleSpeed(Vehicle v) {
-		int newSpeed = (int) (((11.0-v.getContaminacionCoche())/11.0)*this.getMaxSpeed());
+		int newSpeed = (int) (((11.0-v.getCO2())/11.0)*this.getMaxSpeed());
 		return newSpeed;
 	}
 

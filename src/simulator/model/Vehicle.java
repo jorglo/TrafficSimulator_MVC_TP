@@ -17,7 +17,7 @@ public class Vehicle extends SimulatedObject{
 	private VehicleStatus status;			// estado del vehiculo [PENDING, TRAVELING, WAITING, ARRIVED]
 	private Road road;						// carretera por la circula
 	private int location;					// localizacion actual dentro de la carretera
-	private int contClass;					// contaminacion producida por el coche
+	private int cO2;					    // contaminacion producida por el coche
 	private int contaminationWholeWay;      // contaminacion total del coche en el trayecto
 	private int totalTravelledDistance;		// distancia tota recorrida por el coche
 	private int junctionIndex;				// indice de cruces
@@ -56,7 +56,7 @@ public class Vehicle extends SimulatedObject{
 	      
 	      this.location = (newLocation < roadLong)?newLocation:roadLong;
 	      
-	      int c = ((location-preLocation) * contClass);
+	      int c = ((location-preLocation) * cO2);
 	      this.contaminationWholeWay += c;
 	      road.addContamination(c);
 	      
@@ -85,7 +85,7 @@ public class Vehicle extends SimulatedObject{
 		jo.put("speed", this.currentSpeed);
 		jo.put("distance", this.totalTravelledDistance);
 		jo.put("co2", this.contaminationWholeWay);
-		jo.put("class", this.contClass);
+		jo.put("class", this.cO2);
 		jo.put("status", this.status);
 		
 		if(this.status != VehicleStatus.ARRIVED && this.status != VehicleStatus.PENDING) {
@@ -158,7 +158,7 @@ public class Vehicle extends SimulatedObject{
 	 */
 	void setContaminationClass(int c){
 		if(c < 0 || c > 10) throw new ParseException("ContaminationClass tiene que ser un valor entre 0 y 10");
-		this.contClass = c;
+		this.cO2 = c;
 	}
 
 	// GETERS Y SETERS
@@ -167,14 +167,22 @@ public class Vehicle extends SimulatedObject{
 		return currentSpeed;
 	}
 	
+	public int getMaxSpeed() {
+		return maxSpeed;
+	}
+
 	public int getLocation() {
 		return location;
 	}
 	
-	public int getContaminacionCoche() {
-		return contClass;
+	public int getCO2() {
+		return cO2;
 	}
 	
+	public int getContaminationWholeWay() {
+		return contaminationWholeWay;
+	}
+
 	public VehicleStatus getStatus() {
 		return this.status;
 	}
@@ -186,6 +194,12 @@ public class Vehicle extends SimulatedObject{
 	public Road getRoad() {
 		return this.road;
 	}
+
+	public int getTotalTravelledDistance() {
+		return totalTravelledDistance;
+	}
+	
+	
 	
 	
 }
