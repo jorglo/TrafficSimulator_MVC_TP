@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -11,11 +12,19 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
+
+import simulator.model.Event;
+import simulator.model.RoadMap;
 
 public class ChangeWeatherDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L;
+	
+	private RoadMap _map;
+	private List<Event> _events;
+	private int _ticks;
 
 	private JPanel dialogPanel;
 	private JPanel dialogPanelDescription;
@@ -32,7 +41,10 @@ public class ChangeWeatherDialog extends JDialog{
 	private JSpinner spinnerWeather;
 	private JSpinner spinnerTicks;
 	
-    public ChangeWeatherDialog() {
+    public ChangeWeatherDialog(RoadMap map, List<Event> events, int ticks) {
+    	_map = map;
+    	_events = events;
+    	_ticks = ticks;
     	initGUI();     
     }
 
@@ -67,7 +79,7 @@ public class ChangeWeatherDialog extends JDialog{
     	addButtons();
     	
     	//caracteristicas de la caja dialog
-        setTitle("Change CO2 Class");
+        setTitle("Change Weather Class");
         setLocation(300, 200);
         setResizable(false);
 		pack();
@@ -87,14 +99,16 @@ public class ChangeWeatherDialog extends JDialog{
 	private void addFeatures() {
 		
 		jlRoad = new JLabel("Road: ");
-		spinnerRoad = new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
+		spinnerRoad = (_map.getVehicles().size()==0) 
+				? new JSpinner() 
+				: new JSpinner(new SpinnerListModel(_map.getRoads()));
 		spinnerRoad.setToolTipText("Road");
 		spinnerRoad.setPreferredSize(new Dimension(80, 20));
 
 		jlweather = new JLabel("Weather: ");
-		spinnerRoad = new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
-		spinnerRoad.setToolTipText("Weather");
-		spinnerRoad.setPreferredSize(new Dimension(60, 20));
+		spinnerWeather = new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
+		spinnerWeather.setToolTipText("Weather");
+		spinnerWeather.setPreferredSize(new Dimension(60, 20));
 		
 		jlTicks = new JLabel("Ticks: ");
 		spinnerTicks= new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
@@ -138,14 +152,14 @@ public class ChangeWeatherDialog extends JDialog{
 	/* 
     * PARA PROBAR EL DIALOGO SIN PROBAR TODA LA APLICACION COMPLETA 
     */
-	public static void main(String[] args) {
-        try {
-        	ChangeWeatherDialog dialog = new ChangeWeatherDialog();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//	public static void main(String[] args) {
+//        try {
+//        	ChangeWeatherDialog dialog = new ChangeWeatherDialog();
+//            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//            dialog.setVisible(true);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }

@@ -110,13 +110,12 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			// draw line from (x1,y1) to (x2,y2) with arrow of color arrowColor and line of
 			// color roadColor. The size of the arrow is 15px length and 5 px width
 			drawLineWithArrow(g, x1, y1, x2, y2, 15, 5, roadColor, arrowColor);
-			
 			//g.drawLine(x1, y1, x2, y2);
 			
 			//draw road id
 			g.drawString(r.getId(), x1-30, y1);
 			
-			//draw Weathe
+			//draw Weather
 			drawWeather(g,x2+40, y1, r.getWeatherConditions());
 			
 			//draw CO2
@@ -148,7 +147,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			break;
 		}
 		
-		g.drawImage(imgWeather, x, y - 6, 32, 32, this);
+		g.drawImage(imgWeather, x-30, y-15, 32, 32, this);
 		
 	}
 	
@@ -181,7 +180,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			break;
 		}
 		
-		g.drawImage(imgC02, x, y - 6, 32, 32, this);
+		g.drawImage(imgC02, x-10, y-15, 32, 32, this);
 		
 	}
 
@@ -288,7 +287,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 	private Image loadImage(String img) {
 		Image i = null;
 		try {
-			return ImageIO.read(new File("resources/icons/" + img));
+			return ImageIO.read(new File("icons/" + img));
 		} catch (IOException e) {
 		}
 		return i;

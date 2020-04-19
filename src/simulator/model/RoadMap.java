@@ -62,8 +62,9 @@ public class RoadMap {
 		if(!checkItinerary(v))
 			throw new SimulatorError("The Itinerary is not possible!!");
 		
-		mapVehicles.put(v._id,v);
 		listVehicles.add(v);
+		mapVehicles.put(v._id,v);
+		
 	}
 	
 

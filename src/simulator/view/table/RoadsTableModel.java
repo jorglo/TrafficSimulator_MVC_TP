@@ -39,11 +39,12 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 
 	@Override
 	public int getRowCount() {
-		if(_map.getRoads() != null){
-			return _columns == null ? 0 : _map.getRoads().size();
+		if(_map != null) {
+			if(_map.getRoads() != null){
+				return _columns == null ? 0 : _map.getRoads().size();
+			}
 		}
 		return 0;
-		
 	}
 
 	// asi es como se va a cargar la tabla desde el ArrayList
@@ -78,6 +79,8 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 	
 	public void update(RoadMap map) {
 		_map = map;
+		//avisamos al JPanel correspondiente el cambio de los datos.
+		fireTableDataChanged();
 	}
 
 	@Override

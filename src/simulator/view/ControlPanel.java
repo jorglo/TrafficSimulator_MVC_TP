@@ -9,15 +9,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
@@ -35,7 +35,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	private Controller _ctrl;
 	private boolean _stopped;
-	private int _steps;
+	private RoadMap _map;
+	private List<Event> _events;
+	private int _ticks;
 	
 	//JTOOLBAR
 	private JToolBar toolBar; 
@@ -46,10 +48,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	private JButton runButton; 
 	private JButton stopButton; 
 	private JButton quitButton; 
-	private JTextArea eventsEditor; // editor de eventos 
-	private JSpinner stepsSpinner;
-	private JSpinner delaySpinner;
-	private JTextField timeViewer;
+	private JSpinner ticksSpinner;
 	
 	//ACTIONS LISTENERS
 	private final String OPEN = "open";
@@ -58,17 +57,20 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	private final String RUN = "run";
 	private final String STOP = "stop";
 	private final String QUIT = "quit";
-	private final String REDIRECT_OUTPUT = "redirect_output";
-	private final String GENERATE = "generate";
-	private final String CLEAR_REPORTS = "clear_reports";
-	private final String TIME_SIM = "time_sim";
 	
 	public ControlPanel(Controller ctrl) {
 		_ctrl = ctrl;
+		_ctrl.addObserver(this);
+		fc = new JFileChooser();
+		initGUI();
 	}
 	
+	public void initGUI() {
+		addToolBar();	
+	}
+
 	//BOTONERA
-	private void addToolBar() {
+	public void addToolBar() {
 		toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 
@@ -98,23 +100,11 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		stopButton.setToolTipText("Stop");
 		stopButton.addActionListener(this);
 		
-		delaySpinner = new JSpinner(new SpinnerNumberModel(1000, 1, 1000000,1));
-		JLabel delayLabel = new JLabel("Delay: ");
-		delaySpinner.setToolTipText("Delay");
-		delaySpinner.setPreferredSize(new Dimension(60, 30));
-		
-		stepsSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
-		JLabel stepsLabel = new JLabel("Steps: ");
-		stepsSpinner.setToolTipText("Steps");
-		stepsSpinner.setPreferredSize(new Dimension(60, 30));
-		_steps = (int) stepsSpinner.getValue();
-		
-		timeViewer = new JTextField(5);
-		JLabel timeLabel = new JLabel("Time: ");
-		timeViewer.setToolTipText("Time");
-		timeViewer.setPreferredSize(new Dimension(100, 30));
-		timeViewer.setEditable(false);
-		timeViewer.addActionListener(this);
+		ticksSpinner = new JSpinner(new SpinnerNumberModel(10, 10, 1000,1));
+		JLabel stepsLabel = new JLabel("Ticks: ");
+		ticksSpinner.setToolTipText("Ticks");
+		ticksSpinner.setPreferredSize(new Dimension(60, 30));
+		_ticks = (int) ticksSpinner.getValue();
 		
 		quitButton = new JButton(new ImageIcon("icons/exit.png"));
 		quitButton.setActionCommand(QUIT);
@@ -127,20 +117,19 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		toolBar.add(weatherButton);
 		toolBar.add(runButton);
 		toolBar.add(stopButton);
-		toolBar.add(delayLabel);
-		toolBar.add(delaySpinner);
 		toolBar.add(stepsLabel);
-		toolBar.add(stepsSpinner);
-		toolBar.add(timeLabel);
-		toolBar.add(timeViewer);
+		toolBar.add(ticksSpinner);
 		toolBar.add(quitButton);
 		
 		// le indicamos la posicion
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		this.add(toolBar);
+		this.setVisible(true);
 
-		// -------------------------------------------------
-		// *SU FUNCIONALIDAD DE DEFINE EN actionPerformed!!
-		// -------------------------------------------------
+		// ------------------------------------------------- //
+		// *SU FUNCIONALIDAD DE DEFINE EN actionPerformed!!  //
+		// ------------------------------------------------- //
 	}
 
 	//LISTA DE ACCIONES
@@ -153,11 +142,11 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		else if (WEATHER.equals(e.getActionCommand()))
 			weather();
 		else if (RUN.equals(e.getActionCommand()))
-			run_sim(_steps);
+			run_sim(_ticks);
 		else if (STOP.equals(e.getActionCommand()))
 			stop();
 		else if (QUIT.equals(e.getActionCommand()))
-			System.out.println("cerrar ventana");
+			quit();
 	}
 	
 	/**CARGAR FICHERO*/
@@ -169,7 +158,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 			try {
 				inputStream = new FileInputStream(file);
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			_ctrl.reset();
@@ -180,9 +168,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	/**CONTAMINACION*/
 	private void co2class() {
 		try {
-        	ChangeCO2ClassDialog dialog = new ChangeCO2ClassDialog();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
+        	ChangeCO2ClassDialog dialogco2 = new ChangeCO2ClassDialog(_map, _events, _ticks);
+        	dialogco2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        	dialogco2.setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -191,9 +179,9 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	/**CONDICIONES METEOROLOGICAS*/
 	private void weather() {
 		try {
-			ChangeWeatherDialog dialog = new ChangeWeatherDialog();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
+			ChangeWeatherDialog dialogWeather = new ChangeWeatherDialog(_map, _events, _ticks);
+			dialogWeather.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialogWeather.setVisible(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -206,6 +194,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 				_ctrl.run(1);
 			} catch (Exception e ) {
 				// TODO show error message
+				System.out.println(e);
 				_stopped = true ;
 				return ;
 			}
@@ -231,39 +220,50 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		_stopped = true ;
 	}
 	
+	/**CERRAR LA APLICACION*/
+	private void quit() {
+		int opt = JOptionPane.showConfirmDialog(this, "¿Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
+		if(opt == 0) 
+			System.exit(0);
+	}
+	
+	public void update(RoadMap map) {
+		_map = map;
+	}
+	
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		update(map);
 		
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		update(map);
 		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		// TODO Auto-generated method stub
+		update(map);
 		
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		update(map);
 		
 	}
 
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		update(map);
 		
 	}
 
 	@Override
 	public void onError(String err) {
-		// TODO Auto-generated method stub
+		// TODO onError en ControlPanel
 		
 	}
 

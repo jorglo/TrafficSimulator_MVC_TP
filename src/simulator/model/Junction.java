@@ -16,7 +16,6 @@ public class Junction extends SimulatedObject
 {
 	
 	private List<Road> incomingRoadsList;  			// lista de carreteras entrantes al cruce
-	private LinkedList<Vehicle> queueForRoad;		// lista de vehiculos de una carretera
 	private List<List<Vehicle>> listQueues;			// lista de colas de vehiculos para las carreteras entrantes
 	private Map<Road,List<Vehicle>> roadQueue;		// mapa de carretera-colas de vehiculos para hacer busquedas en la cola de una carretera dada
 	private Map<Junction, Road> overcomingRoadsMap; // mapa de carreteras salientes y cruce destino
@@ -55,7 +54,6 @@ public class Junction extends SimulatedObject
 		this.incomingRoadsList = new ArrayList<Road>();
 		this.listQueues = new ArrayList<List<Vehicle>>();
 		this.roadQueue = new HashMap<Road,List<Vehicle>>();
-		this.queueForRoad = new LinkedList<Vehicle>();
 	}
 
 	/**
@@ -66,31 +64,32 @@ public class Junction extends SimulatedObject
 	@Override
 	void advance(int time) {
 		
-		List<Vehicle> cola = new ArrayList<Vehicle>();
+List<Vehicle> cola = new ArrayList<Vehicle>();
 		
-		//extraccion de la cola
+		//si el semaforo está en verde
+		if(this.greenRoadIndex!=-1 && this.listQueues.get(greenRoadIndex).size()!=0) { 
+			//calculo la lista de vehiculos que deben avanzar
+			cola = this.dqStrategy.dequeue(this.listQueues.get(greenRoadIndex));
+		}	
 		
-		if(!this.queueForRoad.isEmpty())
-			cola = this.dqStrategy.dequeue(queueForRoad);
-		
-		//de todos los coches que se tienen que mover, seleccionamos los del semaforo en verde
+		//si la cola NO esta vacía
 		if(!cola.isEmpty()) {
-							
+			//recorro la cola
 			for(Vehicle v: cola) {
-					
-				if(v.getRoad() == this.incomingRoadsList.get(this.greenRoadIndex)) {
-					v.moveToNextRoad();
-					this.queueForRoad.remove(v);
-				}
-			}		
-		}		
+				//muevo el coche a la siguiente carretera
+				v.moveToNextRoad();
+				//lo elimino de la cola de la carretera, que acaba de abandonar
+				this.listQueues.get(greenRoadIndex).remove(v);
+			}	
+		}
 		
 		//cambio de semaforo
 		int aux = this.lsStrategy.chooseNextGreen(incomingRoadsList, listQueues, greenRoadIndex, lastChange, time);
 		if(this.greenRoadIndex != aux) {
 			this.greenRoadIndex = aux;
 			lastChange = time;
-		}
+		}			
+
 	}
 
 	/**
@@ -144,10 +143,13 @@ public class Junction extends SimulatedObject
 		this.incomingRoadsList.add(r);
 		
 		// crea una cola para r
-		queueForRoad = new LinkedList<Vehicle>();
+		List<Vehicle> queueForRoad = new LinkedList<Vehicle>();
 		
 		// anadimos la cola queueForRoad al final de la lista de colas
 		this.listQueues.add(queueForRoad);
+		
+		// anadimos la lista-cola al mapa
+		this.roadQueue.put(r, queueForRoad);
 		
 	}
 	
@@ -174,8 +176,12 @@ public class Junction extends SimulatedObject
 	 * @param v
 	 */
 	void enter(Vehicle v) {
-		this.queueForRoad.add(v);
-		this.roadQueue.put(v.getRoad(), this.queueForRoad);
+		//busco el indice de la carretera
+		int indexRoad = this.incomingRoadsList.indexOf(v.getRoad()); 
+		//anado el vehiculo a la cola de su carretera
+		this.listQueues.get(indexRoad).add(v);
+		//anado la cola al mapa de road-queue
+		this.roadQueue.put(v.getRoad(), this.listQueues.get(indexRoad));
 	}
 	
 	/**
@@ -212,8 +218,8 @@ public class Junction extends SimulatedObject
 		return this.greenRoadIndex;
 	}
 
-	public RenderingHints getInRoads() {
-		return (RenderingHints) this.incomingRoadsList;
+	public List<Road> getInRoads() {
+		return this.incomingRoadsList;
 	}
 
 	public int get_xCoorBR() {
@@ -235,7 +241,5 @@ public class Junction extends SimulatedObject
 	public List<Road> getIncomingRoadsList() {
 		return incomingRoadsList;
 	}
-	
-	
 	
 }

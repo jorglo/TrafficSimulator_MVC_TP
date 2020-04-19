@@ -28,7 +28,14 @@ public class NewSetContClassEvent extends Event{
 	
 	@Override
 	public String toString() {
-	return "New Set Cont Class '" + _id + "'" ;
+
+	String text = "";
+	
+	for (Pair<String, Integer> pair : _cs) {
+		text += "("+pair.getFirst()+","+pair.getSecond()+"),";
+		
+	}
+	return "New Set Cont Class [" + text + "]" ;
 	}
 	
 }

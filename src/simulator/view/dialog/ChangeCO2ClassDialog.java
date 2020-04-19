@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -11,11 +12,19 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
+
+import simulator.model.Event;
+import simulator.model.RoadMap;
 
 public class ChangeCO2ClassDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L;
+	
+	private RoadMap _map;
+	private List<Event> _events;
+	private int _ticks;
 
 	private JPanel dialogPanel;
 	private JPanel dialogPanelDescription;
@@ -32,7 +41,10 @@ public class ChangeCO2ClassDialog extends JDialog{
 	private JSpinner spinnerCO2Class;
 	private JSpinner spinnerTicks;
 	
-    public ChangeCO2ClassDialog() {
+    public ChangeCO2ClassDialog(RoadMap map, List<Event> events, int ticks) {
+    	_map = map;
+    	_events = events;
+    	_ticks = ticks;
     	initGUI();     
     }
 
@@ -87,17 +99,20 @@ public class ChangeCO2ClassDialog extends JDialog{
 	private void addFeatures() {
 		
 		jlVeicle = new JLabel("Vehicle: ");
-		spinnerVehicle = new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
+				
+		spinnerVehicle = (_map.getVehicles().size()==0) 
+				? new JSpinner() 
+				: new JSpinner(new SpinnerListModel(_map.getVehicles()));
 		spinnerVehicle.setToolTipText("Vehicle");
 		spinnerVehicle.setPreferredSize(new Dimension(80, 20));
 
 		jlCO2Class = new JLabel("CO2 Class: ");
-		spinnerCO2Class= new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
+		spinnerCO2Class= new JSpinner(new SpinnerNumberModel(0, 0, 10,1));
 		spinnerCO2Class.setToolTipText("CO2");
 		spinnerCO2Class.setPreferredSize(new Dimension(60, 20));
 		
 		jlTicks = new JLabel("Ticks: ");
-		spinnerTicks= new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
+		spinnerTicks= new JSpinner(new SpinnerNumberModel(1, 1, 1000,1));
 		spinnerTicks.setToolTipText("Ticks");
 		spinnerTicks.setPreferredSize(new Dimension(60, 20));
 		
@@ -138,15 +153,15 @@ public class ChangeCO2ClassDialog extends JDialog{
 	/* 
     * PARA PROBAR EL DIALOGO SIN PROBAR TODA LA APLICACION COMPLETA 
     */
-	public static void main(String[] args) {
-        try {
-        	ChangeCO2ClassDialog dialog = new ChangeCO2ClassDialog();
-            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            dialog.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//	public static void main(String[] args) {
+//        try {
+//        	ChangeCO2ClassDialog dialog = new ChangeCO2ClassDialog();
+//            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//            dialog.setVisible(true);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 }
 

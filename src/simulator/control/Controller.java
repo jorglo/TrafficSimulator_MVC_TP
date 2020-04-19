@@ -19,12 +19,19 @@ public class Controller {
 	private Factory<Event> _eventsFactory;
 
 	public Controller(TrafficSimulator sim, Factory<Event> eventsFactory) throws IllegalArgumentException{
-		if(sim == null) throw new IllegalArgumentException("sim toma un valor null");
-		if(eventsFactory == null) throw new IllegalArgumentException("eventsFactory toma un valor null");
+		if(sim == null) 
+			throw new IllegalArgumentException("sim toma un valor null");
+		if(eventsFactory == null) 
+			throw new IllegalArgumentException("eventsFactory toma un valor null");
+		
 		_trafficSim = sim;
 		_eventsFactory = eventsFactory;
 	}
 	
+	/**
+	 * Cargar eventos
+	 * @param in
+	 */
 	public void loadEvents(InputStream in) {
 		
 		// creamos un objeto de tipo JSONObject al que le pasamos el fichero de entrada
@@ -48,12 +55,21 @@ public class Controller {
 	}
 	
 	//JORGE: metodo run creado con un solo argumento por que lo pedía en la vista
+	/**
+	 * ejecutar la aplicacion por la interfaz grafica
+	 * @param n
+	 */
 	public void run(int n) {
 		for (int i = 0; i < n; i++) {
 			_trafficSim.advance();
 		} 
 	}
 	
+	/**
+	 * ejecutar la aplicacion con fichero de salida
+	 * @param n
+	 * @param out
+	 */
 	public void run(int n, OutputStream out) {
 		
 		JSONObject jo = new JSONObject();
@@ -75,10 +91,42 @@ public class Controller {
 		
 		pw.print(report); 	
 		pw.close();
-	
 	}
 	
-	// METODO RUN PARA PRUEBAS
+	/**
+	 * reset de los valores de la aplicacion
+	 */
+	public void reset() {
+		_trafficSim.reset();
+	}
+	
+	/**
+	 * anadir eventos
+	 * @param e
+	 */
+	public void addEvent(Event e) {
+		_trafficSim.addEvent(e);
+	}
+	
+	// INTEFAZ OBSERVABLE
+	/**
+	 * anadir un observador
+	 * @param o
+	 */
+	public void addObserver(TrafficSimObserver o){
+		_trafficSim.addObserver(o);
+	}
+	
+	/**
+	 * eliminar un observador
+	 * @param o
+	 */
+	public void removeObserver(TrafficSimObserver o) {
+		_trafficSim.removeObserver(o);
+	}
+	
+	
+	// METODO RUN PARA PRUEBAS CON FICHERO
 	
 //	public void run(int n, OutputStream out) {
 //		
@@ -101,21 +149,4 @@ public class Controller {
 //		pw.close();
 //	
 //	}
-	
-	public void reset() {
-		_trafficSim.reset();
-	}
-	
-	public void addObserver(TrafficSimObserver o){
-		_trafficSim.addObserver(o);
-	}
-	
-	public void removeObserver(TrafficSimObserver o) {
-		_trafficSim.addObserver(o);
-	}
-	
-	public void addEvent(Event e) {
-		_trafficSim.addEvent(e);
-	}
-	
 }

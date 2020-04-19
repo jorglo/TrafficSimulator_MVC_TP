@@ -109,11 +109,11 @@ public class Main {
 		}
 	}
 
-	private static void parseInFileOption(CommandLine line) throws ParseException {
-		_inFile = line.getOptionValue("i");
+	private static void parseInFileOption(CommandLine line) throws ParseException {		
 //		if (_inFile == null) {
 //			throw new ParseException("An events file is missing");
 //		}
+		_inFile = line.getOptionValue("i");
 	}
 
 	private static void parseOutFileOption(CommandLine line) throws ParseException {
@@ -142,7 +142,7 @@ public class Main {
 		}
 		//por defecto...
 		else
-			 _guiMode = true;
+			_guiMode = true;
 	}
 
 	private static void initFactories() {

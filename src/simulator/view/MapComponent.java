@@ -204,7 +204,7 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 	private Image loadImage(String img) {
 		Image i = null;
 		try {
-			return ImageIO.read(new File("resources/icons/" + img));
+			return ImageIO.read(new File("icons/" + img));
 		} catch (IOException e) {
 		}
 		return i;

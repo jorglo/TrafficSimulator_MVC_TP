@@ -2,17 +2,20 @@ package simulator.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 
-import simulator.view.table.EventsTableModel;
 import simulator.control.Controller;
+import simulator.view.table.EventsTableModel;
 import simulator.view.table.JunctionsTableModel;
 import simulator.view.table.RoadsTableModel;
 import simulator.view.table.VehiclesTableModel;
@@ -36,18 +39,18 @@ public class MainWindow extends JFrame {
 		JPanel tablesPanel = new JPanel();
 		JPanel mapsPanel = new JPanel();
 		
+		//Definimos su tipo y organizacion dentro de la ventana
+		viewsPanel.setLayout(new BoxLayout(viewsPanel, BoxLayout.X_AXIS));
+		tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
+		mapsPanel.setLayout(new BoxLayout(mapsPanel, BoxLayout.Y_AXIS));
+			
 		//Creamos los componentes
 		JPanel eventsView = createViewPanel(new JTable(new EventsTableModel(_ctrl)), "Events");
 		JPanel vehiclesView = createViewPanel(new JTable(new VehiclesTableModel(_ctrl)), "Vehicles");
 		JPanel roadsView = createViewPanel(new JTable(new RoadsTableModel(_ctrl)), "Roads");
 		JPanel junctionsView = createViewPanel(new JTable(new JunctionsTableModel(_ctrl)), "Junctions");
 		JPanel mapView = createViewPanel(new MapComponent(_ctrl), "Map");
-		JPanel mapByRoadsView = createViewPanel(new MapComponent(_ctrl), "Map By Roads");
-		
-		//Definimos su tipo y organizacion dentro de la ventana
-		viewsPanel.setLayout(new BoxLayout(mapsPanel, BoxLayout.Y_AXIS));
-		tablesPanel.setLayout(new BoxLayout(tablesPanel, BoxLayout.Y_AXIS));
-		mapsPanel.setLayout(new BoxLayout(mapsPanel, BoxLayout.Y_AXIS));
+		JPanel mapByRoadsView = createViewPanel(new MapByRoadComponent(_ctrl), "Map By Roads");
 		
 		//Definimos sus dimensiones dentro de la ventana
 		eventsView.setPreferredSize(new Dimension(500, 200));
@@ -64,26 +67,40 @@ public class MainWindow extends JFrame {
 		mainPanel.add(new StatusBar(_ctrl), BorderLayout.PAGE_END);
 		viewsPanel.add(tablesPanel);
 		viewsPanel.add(mapsPanel);
-		
+		//*tablas
 		tablesPanel.add(eventsView);
 		tablesPanel.add(vehiclesView);
-		tablesPanel.add(junctionsView);
 		tablesPanel.add(roadsView);
-		
+		tablesPanel.add(junctionsView);
+		//*mapas
 		mapsPanel.add(mapView);
 		mapsPanel.add(mapByRoadsView);
-		
-		//nos permite mostrar fácilmente una ventana para la selección de un fichero
-		
 		
 		//Opciones de la ventana
 		this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		this.pack();
+		this.setBounds(300, 100, 1200, 700);
 		this.setVisible(true);
 		
-		//ventana flotante para la confirmacion de cerrar la ventana
-		
-		
+		//accion para la confirmacion de cerrar la ventana
+		//TODO: eliminar para la entrega
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				confirmarCerrarAplicacion();
+				super.windowClosing(e);
+			}
+		});
+	}
+	
+	//VENTANA FLOTANTE CIERRE VISTA*/
+	//TODO: eliminar para la entrega
+	private void confirmarCerrarAplicacion() {
+		int opt = JOptionPane.showConfirmDialog(MainWindow.this, "Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
+		if(opt == 0) 
+			MainWindow.this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		else 
+			MainWindow.this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 	}
 	
 	private JPanel createViewPanel(JComponent c, String title) {

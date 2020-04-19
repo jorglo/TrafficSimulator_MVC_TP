@@ -22,7 +22,7 @@ public class EventsTableModel extends AbstractTableModel {
 	}
 
 	public EventsTableModel(Controller _ctrl) {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void update() {

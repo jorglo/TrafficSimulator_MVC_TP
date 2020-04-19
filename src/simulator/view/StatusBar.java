@@ -41,37 +41,37 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		// TODO onAdvanceStart en StatusBar
 		
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		// TODO onAdvanceEnd en StatusBar
 		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		// TODO Auto-generated method stub
+		// TODO onEventAdded en StatusBar
 		
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		// TODO onReset en StatusBar
 		
 	}
 
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		// TODO Auto-generated method stub
+		// TODO onRegister en StatusBar
 		
 	}
 
 	@Override
 	public void onError(String err) {
-		// TODO Auto-generated method stub
+		// TODO onError en StatusBar
 		
 	}
 

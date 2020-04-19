@@ -5,10 +5,11 @@ import java.util.List;
 
 import org.json.JSONObject;
 
+import simulator.model.TrafficSimObserver;
 import simulator.error.ExecutionException;
 import simulator.misc.SortedArrayList;
 
-public class TrafficSimulator implements Observable<TrafficSimObserver>, TrafficSimObserver{
+public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	
 	private RoadMap _roadMap;
 	private List<Event> _eventsList;
@@ -28,6 +29,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>, Traffic
 	 */
 	public void addEvent(Event e){		
 		_eventsList.add(e);
+		onEventAdded(_roadMap, _eventsList, e, _simulationTime);
 	}
 	
 	/**
@@ -54,7 +56,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>, Traffic
 				if(event._time == _simulationTime) {
 					event.execute(_roadMap);
 					eventsToRemove.add(event);
-					onEventAdded(_roadMap, _eventsList, event, _simulationTime);
+					
 				}
 			}catch(ExecutionException e) {
 				onError(e.getMessage());
@@ -95,33 +97,82 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>, Traffic
 	}
 
 	/* - INTERFACE TRAFFICOBSERVER - */
-	@Override
+	
+	/**
+	 * se invoca cuando se ejecuta el método advance de TrafficSimulator, 
+	 * inmediatamente después de incrementar el tiempo y antes de ejecutar los eventos.
+	 * 
+	 * @param map
+	 * @param events
+	 * @param time
+	 */
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		
+		for(TrafficSimObserver observer : _observersList) 
+			observer.onAdvanceEnd(map, events, time);
 	}
 
-	@Override
+	/**
+	 * se invoca cuando termina el método advance de TrafficSimulator 
+	 * avanzando el estado (es decir, al final del método).
+	 * 
+	 * @param map
+	 * @param events
+	 * @param time
+	 */
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		
+		for(TrafficSimObserver observer : _observersList) 
+			observer.onAdvanceEnd(map, events, time);
 	}
 
-	@Override
+	/**
+	 * se invoca cuando se añade un evento al simulador (después de añadir el evento 
+	 * a la cola). Su tercer parámetro e es el evento que se ha añadido a la cola.
+	 * 
+	 * @param map
+	 * @param events
+	 * @param e
+	 * @param time
+	 */
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		
+		for(TrafficSimObserver observer : _observersList) 
+			observer.onEventAdded(map, events, e, time);
 	}
-
-	@Override
+	
+	/**
+	 * se invoca al final del método reset (es decir, después de hacer el reset).
+	 * 
+	 * @param map
+	 * @param events
+	 * @param time
+	 */
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		
+		for(TrafficSimObserver observer : _observersList) 
+			observer.onReset(map, events, time);
 	}
 
-	@Override
+	/**
+	 * se invoca cuando se registra un observador en la clase TrafficSimulator .
+	 * 
+	 * @param map
+	 * @param events
+	 * @param time
+	 */
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		
+		for(TrafficSimObserver observer : _observersList) 
+			observer.onRegister(map, events, time);
 	}
 
-	@Override
+	/**
+	 * se invoca cuando ocurre un error. Cada vez que se lanza una excepción en la 
+	 * clase TrafficSimulator, primero se debe invocar onError(...) con el
+	 * correspondiente mensaje y posteriormente lanzar la excepción. Si se lanza una
+	 * excepción e en el método advance de las carreteras y los cruces, se debe capturar en
+	 * TrafficSimulator , invocar onError con el mensaje e.getMessage() , y por último
+	 * volver a lanzarla.
+	 * 
+	 * @param err
+	 */
 	public void onError(String err) {
-		
+		//TODO: falta todo el control de errores
 	}
 }

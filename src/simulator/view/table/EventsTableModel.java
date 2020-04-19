@@ -40,11 +40,12 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 
 	@Override
 	public int getRowCount() {
-		if(_events != null){
-			return _columns == null ? 0 : _events.size();
+		if(_events != null) {
+			if(_events != null){
+				return _columns == null ? 0 : _events.size();
+			}
 		}
 		return 0;
-		
 	}
 
 	// asi es como se va a cargar la tabla desde el ArrayList
@@ -65,6 +66,8 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 	
 	public void update(List<Event> events) {
 		_events = events;
+		//avisamos al JPanel correspondiente el cambio de los datos.
+		fireTableDataChanged();
 	}
 
 	@Override
@@ -85,8 +88,7 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		update(events);
-		
+		update(events);	
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 
 	@Override
 	public void onError(String err) {
-		// TODO Auto-generated method stub
+		// TODO onError en EventsTableModel
 		
 	}
 

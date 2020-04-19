@@ -43,11 +43,12 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 
 	@Override
 	public int getRowCount() {
-		if(_map.getJunctions() != null){
-			return _columns == null ? 0 : _map.getJunctions().size();
+		if(_map != null) {
+			if(_map.getJunctions() != null){
+				return _columns == null ? 0 : _map.getJunctions().size();
+			}
 		}
 		return 0;
-		
 	}
 
 	// asi es como se va a cargar la tabla desde el ArrayList
@@ -63,18 +64,24 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 			s = (GreenLightIndex != -1) ? GreenLightIndex : "NONE";
 			break;
 		case 2:
-			String text = null;
-			String idRoad = null;
-			String idVehicle = null;
+			String text = "";
+			String idRoad = "";
+			String idVehicle = "";
 					
 			Iterator<Entry<Road, List<Vehicle>>> it = _map.getJunctions().get(rowIndex).getRoadQueue().entrySet().iterator();
-			
-			while (it.hasNext()) {
-				Entry<Road, List<Vehicle>> e = it.next();
-				for(Vehicle v : e.getValue())
-					idVehicle += v.getId() + ", ";
-				text += idRoad + "[" + idVehicle + "]";
-			}		
+			for (Road r : _map.getRoads()) {
+				if(_map.getJunctions().get(rowIndex).getIncomingRoadsList().contains(r)) {
+				text += r.getId()+":[";
+				while (it.hasNext()) {
+					Entry<Road, List<Vehicle>> e = it.next();
+					for(Vehicle v : e.getValue())
+						idVehicle += v.getId() + ", ";
+					text += idVehicle;
+				}
+				text += "] ";
+				}
+			}
+				
 	
 			s = text;
 			break;
@@ -85,6 +92,8 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 	
 	public void update(RoadMap map) {
 		_map = map;
+		//avisamos al JPanel correspondiente el cambio de los datos.
+		fireTableDataChanged();
 	}
 
 	@Override

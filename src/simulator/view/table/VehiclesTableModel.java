@@ -40,8 +40,10 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 
 	@Override
 	public int getRowCount() {
-		if(_map.getVehicles() != null){
-			return _columns == null ? 0 : _map.getVehicles().size();
+		if(_map != null) {
+			if(_map.getVehicles() != null){
+				return _columns == null ? 0 : _map.getVehicles().size();
+			}
 		}
 		return 0;
 		
@@ -61,7 +63,7 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 			s = idRoad + ":" + location;
 			break;
 		case 2:
-			String text = null;
+			String text = "";
 			List<Junction> itinerary = _map.getVehicles().get(rowIndex).getItinerary();
 			for(Junction j : itinerary) {
 				text +=j.getId()+", ";
@@ -89,6 +91,8 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 	
 	public void update(RoadMap map) {
 		_map = map;
+		//avisamos al JPanel correspondiente el cambio de los datos.
+		fireTableDataChanged();
 	}
 
 	@Override
