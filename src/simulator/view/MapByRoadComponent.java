@@ -212,6 +212,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 		}
 	}
 	
+	//DUDA: no hace el movimiento del coche bien.
 	private void drawVehicles(Graphics g) {
 		for (Vehicle v : _map.getVehicles()) {
 			if (v.getStatus() != VehicleStatus.ARRIVED) {
@@ -228,14 +229,11 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 				double alpha = Math.atan(((double) Math.abs(x1 - x2)) / ((double) Math.abs(y1 - y2)));
 				double relLoc = roadLength * ((double) v.getLocation()) / ((double) r.getLength());
 				//double x = Math.sin(alpha) * relLoc;
+				double x = x1 + ( int ) ((x2 - x1) * (( double ) relLoc / ( double ) roadLength));
 				double y = Math.cos(alpha) * relLoc;
-				int xDir = x1 < x2 ? 1 : -1;
+				int xDir = x1 <= x2 ? 1 : -1;
 				int yDir = y1 < y2 ? 1 : -1;
-				
-				double A = v.getLocation();
-				double B = roadLength;
 
-				int x = x1 + ( int ) ((x2 - x1) * (( double ) A / ( double ) B));
 				int vX = x1 + xDir * ((int) x);
 				int vY = y1 + yDir * ((int) y);
 
@@ -244,12 +242,52 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 				int vLabelColor = (int) (25.0 * (10.0 - (double) v.getCO2()));
 				g.setColor(new Color(0, vLabelColor, 0));
 
-				// draw an image of a car and it identifier
-				g.drawImage(_car, vX, vY - 6, 16, 16, this);
-				g.drawString(v.getId(), vX, vY - 6);
+				// draw an image of a car (with circle as background) and it identifier
+				g.drawImage(_car, vX, vY-20, 16, 16, this);
+				g.drawString(v.getId(), vX, vY-20);
+				
 			}
 		}
 	}
+	
+//	private void drawVehicles(Graphics g) {
+//		for (Vehicle v : _map.getVehicles()) {
+//			if (v.getStatus() != VehicleStatus.ARRIVED) {
+//
+//				// The calculation below compute the coordinate (vX,vY) of the vehicle on the
+//				// corresponding road. It is calculated relativly to the length of the road, and
+//				// the location on the vehicle.
+//				Road r = v.getRoad();
+//				int x1 = r.getSrcJunc().get_xCoorBR();
+//				int y1 = r.getSrcJunc().get_yCoorBR();
+//				int x2 = r.getDestJunc().get_xCoorBR();
+//				int y2 = r.getDestJunc().get_yCoorBR();
+//				double roadLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+//				double alpha = Math.atan(((double) Math.abs(x2 - x1)) / ((double) Math.abs(y2 - y1)));
+//				double relLoc = roadLength * ((double) v.getLocation()) / ((double) r.getLength());
+//				//double x = Math.sin(alpha) * relLoc;
+//				double y = Math.cos(alpha) * relLoc;
+//				int xDir = x1 < x2 ? 1 : -1;
+//				int yDir = y1 < y2 ? 1 : -1;
+//				
+//				double A = v.getLocation();
+//				double B = roadLength;
+//
+//				int x = x1 + ( int ) ((x2 - x1) * (( double ) A / ( double ) B));
+//				int vX = x1 + xDir * ((int) x);
+//				int vY = y1 + yDir * ((int) y);
+//
+//				// Choose a color for the vehcile's label and background, depending on its
+//				// contamination class
+//				int vLabelColor = (int) (25.0 * (10.0 - (double) v.getCO2()));
+//				g.setColor(new Color(0, vLabelColor, 0));
+//
+//				// draw an image of a car and it identifier
+//				g.drawImage(_car, vX+60, vY, 16, 16, this);
+//				g.drawString(v.getId(), vX+60, vY);
+//			}
+//		}
+//	}
 	
 	// This method draws a line from (x1,y1) to (x2,y2) with an arrow.
 	// The arrow is of height h and width w.

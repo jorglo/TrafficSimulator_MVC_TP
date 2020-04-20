@@ -173,6 +173,6 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 * @param err
 	 */
 	public void onError(String err) {
-		//TODO: falta todo el control de errores
+		//TODO: onError en TraficSimulator
 	}
 }

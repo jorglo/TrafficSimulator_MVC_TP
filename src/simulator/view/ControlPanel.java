@@ -38,6 +38,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	private RoadMap _map;
 	private List<Event> _events;
 	private int _ticks;
+	private int _time;
 	
 	//JTOOLBAR
 	private JToolBar toolBar; 
@@ -121,6 +122,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		toolBar.add(ticksSpinner);
 		toolBar.add(quitButton);
 		
+		//JORGE: colocar ControlPanel
 		// le indicamos la posicion
 		toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
@@ -141,8 +143,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 			co2class();
 		else if (WEATHER.equals(e.getActionCommand()))
 			weather();
-		else if (RUN.equals(e.getActionCommand()))
-			run_sim(_ticks);
+		else if (RUN.equals(e.getActionCommand())) {
+			run_sim(_ticks); 
+			_stopped = false;
+		}
 		else if (STOP.equals(e.getActionCommand()))
 			stop();
 		else if (QUIT.equals(e.getActionCommand()))
@@ -168,7 +172,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	/**CONTAMINACION*/
 	private void co2class() {
 		try {
-        	ChangeCO2ClassDialog dialogco2 = new ChangeCO2ClassDialog(_map, _events, _ticks);
+        	ChangeCO2ClassDialog dialogco2 = new ChangeCO2ClassDialog(_ctrl, _map, _events, _time);
         	dialogco2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         	dialogco2.setVisible(true);
         } catch (Exception e) {
@@ -179,7 +183,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	/**CONDICIONES METEOROLOGICAS*/
 	private void weather() {
 		try {
-			ChangeWeatherDialog dialogWeather = new ChangeWeatherDialog(_map, _events, _ticks);
+			ChangeWeatherDialog dialogWeather = new ChangeWeatherDialog(_ctrl, _map, _events, _time);
 			dialogWeather.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialogWeather.setVisible(true);
         } catch (Exception e) {
@@ -192,6 +196,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		if ( n > 0 && ! _stopped ) {
 			try {
 				_ctrl.run(1);
+				enableToolBar( false );
 			} catch (Exception e ) {
 				// TODO show error message
 				System.out.println(e);
@@ -210,9 +215,13 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		}
 	}
 		
+	// APAGADO Y ENCENDIDO DE LA VISTA
 	private void enableToolBar(boolean enable) {
-		
-		
+		openButton.setEnabled(enable);
+		co2classButton.setEnabled(enable);
+		weatherButton.setEnabled(enable);
+		runButton.setEnabled(enable);
+		quitButton.setEnabled(enable);
 	}
 
 	/**PARAR LA SIMULACION*/
@@ -227,37 +236,38 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 			System.exit(0);
 	}
 	
-	public void update(RoadMap map) {
+	public void update(RoadMap map, int time) {
 		_map = map;
+		_time = time;
 	}
 	
 	@Override
 	public void onAdvanceStart(RoadMap map, List<Event> events, int time) {
-		update(map);
+		update(map, time);
 		
 	}
 
 	@Override
 	public void onAdvanceEnd(RoadMap map, List<Event> events, int time) {
-		update(map);
+		update(map, time);
 		
 	}
 
 	@Override
 	public void onEventAdded(RoadMap map, List<Event> events, Event e, int time) {
-		update(map);
+		update(map, time);
 		
 	}
 
 	@Override
 	public void onReset(RoadMap map, List<Event> events, int time) {
-		update(map);
+		update(map, time);
 		
 	}
 
 	@Override
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		update(map);
+		update(map, time);
 		
 	}
 
@@ -268,3 +278,4 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	}
 
 }
+

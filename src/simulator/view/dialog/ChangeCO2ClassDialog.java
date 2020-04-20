@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -15,16 +16,26 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import simulator.control.Controller;
+import simulator.factories.SetContClassEventBuilder;
+import simulator.factories.SetWeatherEventBuilder;
+import simulator.misc.Pair;
 import simulator.model.Event;
+import simulator.model.NewSetContClassEvent;
 import simulator.model.RoadMap;
 
 public class ChangeCO2ClassDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L;
 	
+	private Controller _ctrl;
 	private RoadMap _map;
 	private List<Event> _events;
 	private int _ticks;
+	private int _time;
 
 	private JPanel dialogPanel;
 	private JPanel dialogPanelDescription;
@@ -41,10 +52,11 @@ public class ChangeCO2ClassDialog extends JDialog{
 	private JSpinner spinnerCO2Class;
 	private JSpinner spinnerTicks;
 	
-    public ChangeCO2ClassDialog(RoadMap map, List<Event> events, int ticks) {
+    public ChangeCO2ClassDialog(Controller ctrl, RoadMap map, List<Event> events, int time) {
+    	_ctrl = ctrl;
     	_map = map;
     	_events = events;
-    	_ticks = ticks;
+    	_time = time;
     	initGUI();     
     }
 
@@ -140,8 +152,24 @@ public class ChangeCO2ClassDialog extends JDialog{
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-        	//TODO: implementar
-        	
+        	//DUDA: evento de ChangeCO2ClassDialog
+    
+        	List<Pair<String, Integer>> contClass = new ArrayList<Pair<String,Integer>>();
+    		String first;
+    		Integer second;
+    		Pair<String, Integer> coche = null;
+    			
+    			first = spinnerVehicle.getValue().toString();
+    			second = (int) spinnerCO2Class.getValue();
+    			
+    			coche = new Pair<String, Integer>(first, second);
+ 
+    			contClass.add(coche);
+    			
+    			_ticks = (int)spinnerTicks.getValue();
+    			int newTime = _time + _ticks;
+    			
+        	_ctrl.addEvent(new NewSetContClassEvent(newTime, contClass));
         	}
         });
         okButton.setActionCommand("OK");

@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -15,16 +16,22 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
 
+import simulator.control.Controller;
+import simulator.misc.Pair;
 import simulator.model.Event;
+import simulator.model.NewSetContClassEvent;
+import simulator.model.NewSetWeatherEvent;
 import simulator.model.RoadMap;
 
 public class ChangeWeatherDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L;
 	
+	private Controller _ctrl;
 	private RoadMap _map;
 	private List<Event> _events;
 	private int _ticks;
+	private int _time;
 
 	private JPanel dialogPanel;
 	private JPanel dialogPanelDescription;
@@ -41,10 +48,11 @@ public class ChangeWeatherDialog extends JDialog{
 	private JSpinner spinnerWeather;
 	private JSpinner spinnerTicks;
 	
-    public ChangeWeatherDialog(RoadMap map, List<Event> events, int ticks) {
+    public ChangeWeatherDialog(Controller ctrl, RoadMap map, List<Event> events, int time) {
+    	_ctrl = ctrl;
     	_map = map;
     	_events = events;
-    	_ticks = ticks;
+    	_time = time;
     	initGUI();     
     }
 
@@ -139,8 +147,23 @@ public class ChangeWeatherDialog extends JDialog{
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-        	//TODO: implementar
-            
+        	//TODO: implementar el nuevo evento de ChangeWeatherDialog
+        	List<Pair<String, Integer>> contClass = new ArrayList<Pair<String,Integer>>();
+    		String first;
+    		Integer second;
+    		Pair<String, Integer> coche = null;
+    			
+    			first = spinnerRoad.getValue().toString();
+    			second = (int) spinnerWeather.getValue();
+    			
+    			coche = new Pair<String, Integer>(first, second);
+ 
+    			contClass.add(coche);
+    			
+    			_ticks = (int)spinnerTicks.getValue();
+    			int newTime = _time + _ticks;
+    			
+        	//_ctrl.addEvent(new NewSetWeatherEvent(newTime, contClass));
         	}
         });
         okButton.setActionCommand("OK");

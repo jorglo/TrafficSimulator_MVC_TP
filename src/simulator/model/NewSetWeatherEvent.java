@@ -30,9 +30,9 @@ public class NewSetWeatherEvent extends Event{
 		
 		for (Pair<String, Weather> pair : _ws) {
 			text += "("+pair.getFirst()+","+pair.getSecond()+"),";
-			
 		}
-		return "New Set Weather Event [" + text + "]" ;
+		
+		return "Change Weather: [" + text + "]";
 	}
 	
 }

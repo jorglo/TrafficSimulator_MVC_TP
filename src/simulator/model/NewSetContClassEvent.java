@@ -28,14 +28,13 @@ public class NewSetContClassEvent extends Event{
 	
 	@Override
 	public String toString() {
-
-	String text = "";
-	
-	for (Pair<String, Integer> pair : _cs) {
-		text += "("+pair.getFirst()+","+pair.getSecond()+"),";
+		String text = "";
 		
-	}
-	return "New Set Cont Class [" + text + "]" ;
+		for (Pair<String, Integer> pair : _cs) {
+			text += "("+pair.getFirst()+","+pair.getSecond()+"),";	
+		}
+		
+		return "Change CO2 Class: [" + text + "]";
 	}
 	
 }
