@@ -170,6 +170,7 @@ public class ChangeCO2ClassDialog extends JDialog{
     			int newTime = _time + _ticks;
     			
         	_ctrl.addEvent(new NewSetContClassEvent(newTime, contClass));
+        	dispose();
         	}
         });
         okButton.setActionCommand("OK");

@@ -22,6 +22,7 @@ import simulator.model.Event;
 import simulator.model.NewSetContClassEvent;
 import simulator.model.NewSetWeatherEvent;
 import simulator.model.RoadMap;
+import simulator.model.Weather;
 
 public class ChangeWeatherDialog extends JDialog{
 
@@ -111,17 +112,17 @@ public class ChangeWeatherDialog extends JDialog{
 				? new JSpinner() 
 				: new JSpinner(new SpinnerListModel(_map.getRoads()));
 		spinnerRoad.setToolTipText("Road");
-		spinnerRoad.setPreferredSize(new Dimension(80, 20));
+		spinnerRoad.setPreferredSize(new Dimension(50, 20));
 
 		jlweather = new JLabel("Weather: ");
-		spinnerWeather = new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
+		spinnerWeather = new JSpinner(new SpinnerListModel(Weather.values()));
 		spinnerWeather.setToolTipText("Weather");
-		spinnerWeather.setPreferredSize(new Dimension(60, 20));
+		spinnerWeather.setPreferredSize(new Dimension(70, 20));
 		
 		jlTicks = new JLabel("Ticks: ");
 		spinnerTicks= new JSpinner(new SpinnerNumberModel(1, 1, 100,1));
 		spinnerTicks.setToolTipText("Ticks");
-		spinnerTicks.setPreferredSize(new Dimension(60, 20));
+		spinnerTicks.setPreferredSize(new Dimension(50, 20));
 		
 		dialogPanelFeatures.add(jlRoad);
 		dialogPanelFeatures.add(spinnerRoad);
@@ -148,22 +149,22 @@ public class ChangeWeatherDialog extends JDialog{
         okButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
         	//TODO: implementar el nuevo evento de ChangeWeatherDialog
-        	List<Pair<String, Integer>> contClass = new ArrayList<Pair<String,Integer>>();
+        	List<Pair<String, Weather>> contClass = new ArrayList<Pair<String,Weather>>();
     		String first;
-    		Integer second;
-    		Pair<String, Integer> coche = null;
+    		Weather second;
+    		Pair<String, Weather> coche = null;
     			
     			first = spinnerRoad.getValue().toString();
-    			second = (int) spinnerWeather.getValue();
+    			second = (Weather) spinnerWeather.getValue();
     			
-    			coche = new Pair<String, Integer>(first, second);
+    			coche = new Pair<String, Weather>(first, second);
  
     			contClass.add(coche);
     			
     			_ticks = (int)spinnerTicks.getValue();
     			int newTime = _time + _ticks;
     			
-        	//_ctrl.addEvent(new NewSetWeatherEvent(newTime, contClass));
+        	_ctrl.addEvent(new NewSetWeatherEvent(newTime, contClass));
         	}
         });
         okButton.setActionCommand("OK");
