@@ -181,10 +181,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		JLabel stepsLabel = new JLabel("Ticks: ");
 		ticksSpinner.setToolTipText("Ticks");
 		ticksSpinner.setPreferredSize(new Dimension(60, 30));
-<<<<<<< HEAD
-		
-=======
->>>>>>> branch 'master' of https://github.com/jorglo/TrafficSimulator_MVC_TP.git
+
 		
 		// le indicamos la posicion
 		toolBar3.setLayout(new FlowLayout(FlowLayout.LEFT));
