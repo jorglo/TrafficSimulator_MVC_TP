@@ -84,10 +84,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		//declaramos su organizacion dentro del panel contenedor
 		jpToolBar1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		//añadimos las caracteristicas
+		//aï¿½adimos las caracteristicas
 		jpToolBar1.setPreferredSize(new Dimension(1100, 50));
 		
-		// añadimos los componentes
+		// aï¿½adimos los componentes
 		addToolBar1();
 		addToolBar2();
 		addToolBar3();
@@ -100,10 +100,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		//declaramos su organizacion dentro del panel contenedor
 		jpToolBar2.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		// añadimos los componentes
+		// aï¿½adimos los componentes
 		addToolBar4();
 		
-		// añadimos paneles
+		// aï¿½adimos paneles
 		this.add(jpToolBar1);
 		this.add(jpToolBar2);
 		
@@ -125,7 +125,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// le indicamos la posicion
 		toolBar1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		// añadimos los botones al panel
+		// aï¿½adimos los botones al panel
 		toolBar1.add(openButton);
 		jpToolBar1.add(toolBar1);
 
@@ -153,7 +153,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// le indicamos la posicion
 		toolBar2.setLayout(new FlowLayout(FlowLayout.LEFT));
 			
-		// añadimos los botones al panel
+		// aï¿½adimos los botones al panel
 		toolBar2.add(co2classButton);
 		toolBar2.add(weatherButton);
 		jpToolBar1.add(toolBar2);
@@ -181,12 +181,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		JLabel stepsLabel = new JLabel("Ticks: ");
 		ticksSpinner.setToolTipText("Ticks");
 		ticksSpinner.setPreferredSize(new Dimension(60, 30));
-		_ticks = (int) ticksSpinner.getValue();
+		
 		
 		// le indicamos la posicion
 		toolBar3.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		// añadimos los botones al panel
+		// aï¿½adimos los botones al panel
 		toolBar3.add(runButton);
 		toolBar3.add(stopButton);
 		toolBar3.add(stepsLabel);
@@ -212,7 +212,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// le indicamos la posicion
 		toolBar4.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		// añadimos los botones al panel
+		// aï¿½adimos los botones al panel
 		toolBar4.add(quitButton);
 		jpToolBar2.add(toolBar4);
 
@@ -231,6 +231,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		else if (WEATHER.equals(e.getActionCommand()))
 			weather();
 		else if (RUN.equals(e.getActionCommand())) {
+			_ticks = (int) ticksSpinner.getValue();
 			run_sim(_ticks); 
 			_stopped = false;
 		}
@@ -286,7 +287,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 				enableToolBar( false );
 			} catch (Exception e ) {
 				// TODO show error message
-				System.out.println(e);
+				//System.out.println(e);
 				_stopped = true ;
 				return ;
 			}
@@ -318,7 +319,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	/**CERRAR LA APLICACION*/
 	private void quit() {
-		int opt = JOptionPane.showConfirmDialog(this, "¿Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
+		int opt = JOptionPane.showConfirmDialog(this, "ï¿½Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
 		if(opt == 0) 
 			System.exit(0);
 	}
@@ -409,7 +410,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 //	quitButton.setToolTipText("Quit");
 //	quitButton.addActionListener(this);
 //	
-//	// añadimos los botones al panel
+//	// aï¿½adimos los botones al panel
 //	toolBar.add(openButton);
 //	toolBar.add(co2classButton);
 //	toolBar.add(weatherButton);

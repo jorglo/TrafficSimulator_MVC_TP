@@ -60,7 +60,7 @@ public class MainWindow extends JFrame {
 		mapView.setPreferredSize(new Dimension(500, 400));
 		mapByRoadsView.setPreferredSize(new Dimension(500, 400));
 		
-		//añadimos los paneles
+		//aï¿½adimos los paneles
 		this.setContentPane(mainPanel);
 		mainPanel.add(new ControlPanel(_ctrl), BorderLayout.PAGE_START);
 		mainPanel.add(viewsPanel, BorderLayout.CENTER);

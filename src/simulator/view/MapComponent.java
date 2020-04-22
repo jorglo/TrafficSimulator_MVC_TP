@@ -165,8 +165,10 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 		}
 		maxW += 20;
 		maxH += 20;
-		setPreferredSize(new Dimension(maxW, maxH));
-		setSize(new Dimension(maxW, maxH));
+		if (maxW > getWidth() || maxH > getHeight()) {         
+			setPreferredSize(new Dimension(maxW, maxH)); 
+			setSize(new Dimension(maxW, maxH));
+		}
 	}
 
 	// This method draws a line from (x1,y1) to (x2,y2) with an arrow.

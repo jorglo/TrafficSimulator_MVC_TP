@@ -29,7 +29,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 */
 	public void addEvent(Event e){		
 		_eventsList.add(e);
-		onEventAdded(_roadMap, _eventsList, e, _simulationTime);
+		onEventAdded(_roadMap, _eventsList, e, _simulationTime); //TODO ALVARO innecesario
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	
 	public void reset() {
 		_eventsList.clear();
-		_roadMap = null;
+		_roadMap = new RoadMap();
 		_simulationTime = 0;
 		onReset(_roadMap, _eventsList, _simulationTime);
 	}
@@ -99,8 +99,8 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	/* - INTERFACE TRAFFICOBSERVER - */
 	
 	/**
-	 * se invoca cuando se ejecuta el método advance de TrafficSimulator, 
-	 * inmediatamente después de incrementar el tiempo y antes de ejecutar los eventos.
+	 * se invoca cuando se ejecuta el mï¿½todo advance de TrafficSimulator, 
+	 * inmediatamente despuï¿½s de incrementar el tiempo y antes de ejecutar los eventos.
 	 * 
 	 * @param map
 	 * @param events
@@ -112,8 +112,8 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	}
 
 	/**
-	 * se invoca cuando termina el método advance de TrafficSimulator 
-	 * avanzando el estado (es decir, al final del método).
+	 * se invoca cuando termina el mï¿½todo advance de TrafficSimulator 
+	 * avanzando el estado (es decir, al final del mï¿½todo).
 	 * 
 	 * @param map
 	 * @param events
@@ -125,8 +125,8 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	}
 
 	/**
-	 * se invoca cuando se añade un evento al simulador (después de añadir el evento 
-	 * a la cola). Su tercer parámetro e es el evento que se ha añadido a la cola.
+	 * se invoca cuando se aï¿½ade un evento al simulador (despuï¿½s de aï¿½adir el evento 
+	 * a la cola). Su tercer parï¿½metro e es el evento que se ha aï¿½adido a la cola.
 	 * 
 	 * @param map
 	 * @param events
@@ -139,7 +139,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	}
 	
 	/**
-	 * se invoca al final del método reset (es decir, después de hacer el reset).
+	 * se invoca al final del mï¿½todo reset (es decir, despuï¿½s de hacer el reset).
 	 * 
 	 * @param map
 	 * @param events
@@ -158,16 +158,16 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 * @param time
 	 */
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		for(TrafficSimObserver observer : _observersList) 
+		for(TrafficSimObserver observer : _observersList) //TODO ALVARO creo que es innecesario
 			observer.onRegister(map, events, time);
 	}
 
 	/**
-	 * se invoca cuando ocurre un error. Cada vez que se lanza una excepción en la 
+	 * se invoca cuando ocurre un error. Cada vez que se lanza una excepciï¿½n en la 
 	 * clase TrafficSimulator, primero se debe invocar onError(...) con el
-	 * correspondiente mensaje y posteriormente lanzar la excepción. Si se lanza una
-	 * excepción e en el método advance de las carreteras y los cruces, se debe capturar en
-	 * TrafficSimulator , invocar onError con el mensaje e.getMessage() , y por último
+	 * correspondiente mensaje y posteriormente lanzar la excepciï¿½n. Si se lanza una
+	 * excepciï¿½n e en el mï¿½todo advance de las carreteras y los cruces, se debe capturar en
+	 * TrafficSimulator , invocar onError con el mensaje e.getMessage() , y por ï¿½ltimo
 	 * volver a lanzarla.
 	 * 
 	 * @param err

@@ -71,18 +71,18 @@ public class ChangeWeatherDialog extends JDialog{
     	dialogPanelFeatures.setLayout(new FlowLayout(FlowLayout.LEFT));
     	dialogPanelButtons.setLayout(new FlowLayout(FlowLayout.CENTER));
     	
-    	//añadimos las caracteristicas
+    	//aï¿½adimos las caracteristicas
     	dialogPanelDescription.setPreferredSize(new Dimension(390, 55));
     	dialogPanelFeatures.setPreferredSize(new Dimension(390, 40));
     	dialogPanelButtons.setPreferredSize(new Dimension(390, 40));
     	
-    	//añadimos los paneles 
+    	//aï¿½adimos los paneles 
     	this.setContentPane(dialogPanel);
     	dialogPanel.add(dialogPanelDescription);
     	dialogPanel.add(dialogPanelFeatures);
     	dialogPanel.add(dialogPanelButtons);
     	
-    	//añadimos los componentes de los Layauts
+    	//aï¿½adimos los componentes de los Layauts
     	addDescription();
     	addFeatures();
     	addButtons();
@@ -165,6 +165,7 @@ public class ChangeWeatherDialog extends JDialog{
     			int newTime = _time + _ticks;
     			
         	_ctrl.addEvent(new NewSetWeatherEvent(newTime, contClass));
+        	dispose();
         	}
         });
         okButton.setActionCommand("OK");
