@@ -115,7 +115,7 @@ public class Vehicle extends SimulatedObject{
 			//.. comprobamos que no se va a andir a la primera carretera y borramos el vehiculo de la lista anterior
 			if(junctionIndex != 0) {
 				this.road.getVehicleList().remove(this);
-				this.road.getDestJunc().getRoadQueue().remove(this.road);
+				//this.road.getDestJunc().getRoadQueue().remove(this.road);
 			}
 			
 			//.. anadimos los nuevos valores del coche

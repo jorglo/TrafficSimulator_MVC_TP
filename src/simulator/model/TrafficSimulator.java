@@ -39,9 +39,15 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 		_simulationTime++;
 		onAdvanceStart(_roadMap, _eventsList, _simulationTime);
 		executeEvents();
-		_roadMap.advanceJuntion(_simulationTime);
-		_roadMap.advanceRoad(_simulationTime);
-		onAdvanceEnd(_roadMap, _eventsList, _simulationTime);
+		try {
+			_roadMap.advanceJuntion(_simulationTime);
+			_roadMap.advanceRoad(_simulationTime);
+			onAdvanceEnd(_roadMap, _eventsList, _simulationTime);
+		} catch (Exception e) {
+			onError(e.getMessage());
+			throw new ExecutionException(e.getMessage());
+		}
+		
 	}
 	
 	/**
@@ -173,6 +179,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 * @param err
 	 */
 	public void onError(String err) {
-		//TODO: onError en TraficSimulator
+		for(TrafficSimObserver observer : _observersList) //TODO ALVARO creo que es innecesario
+			observer.onError(err);
 	}
 }

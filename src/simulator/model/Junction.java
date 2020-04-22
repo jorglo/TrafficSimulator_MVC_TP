@@ -1,6 +1,5 @@
 package simulator.model;
 
-import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -64,7 +63,7 @@ public class Junction extends SimulatedObject
 	@Override
 	void advance(int time) {
 		
-List<Vehicle> cola = new ArrayList<Vehicle>();
+		List<Vehicle> cola = new ArrayList<Vehicle>();
 		
 		//si el semaforo está en verde
 		if(this.greenRoadIndex!=-1 && this.listQueues.get(greenRoadIndex).size()!=0) { 
@@ -238,8 +237,10 @@ List<Vehicle> cola = new ArrayList<Vehicle>();
 		this._yCoorBR = _yCoorBR;
 	}
 
-	public List<Road> getIncomingRoadsList() {
-		return incomingRoadsList;
+	public List<List<Vehicle>> getListQueues() {
+		return listQueues;
 	}
+	
+	
 	
 }

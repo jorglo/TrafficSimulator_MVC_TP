@@ -259,24 +259,21 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	/**CONTAMINACION*/
 	private void co2class() {
-		try {
-        	ChangeCO2ClassDialog dialogco2 = new ChangeCO2ClassDialog(_ctrl, _map, _events, _time);
+		
+		if(_map.getVehicles().size()!=0) {
+			ChangeCO2ClassDialog dialogco2 = new ChangeCO2ClassDialog(_ctrl, _map, _events, _time);
         	dialogco2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         	dialogco2.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		}
 	}
 	
 	/**CONDICIONES METEOROLOGICAS*/
 	private void weather() {
-		try {
+		if(_map.getVehicles().size()!=0) {
 			ChangeWeatherDialog dialogWeather = new ChangeWeatherDialog(_ctrl, _map, _events, _time);
 			dialogWeather.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialogWeather.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		}
 	}
 	
 	/**EJECUTAR SIMULACION*/
@@ -319,7 +316,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	/**CERRAR LA APLICACION*/
 	private void quit() {
-		int opt = JOptionPane.showConfirmDialog(this, "�Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
+		int opt = JOptionPane.showConfirmDialog(this, "Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
 		if(opt == 0) 
 			System.exit(0);
 	}

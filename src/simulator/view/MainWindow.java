@@ -2,13 +2,10 @@ package simulator.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -84,24 +81,24 @@ public class MainWindow extends JFrame {
 		
 		//accion para la confirmacion de cerrar la ventana
 		//TODO: eliminar para la entrega
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				confirmarCerrarAplicacion();
-				super.windowClosing(e);
-			}
-		});
+//		addWindowListener(new WindowAdapter() {
+//			@Override
+//			public void windowClosing(WindowEvent e) {
+//				confirmarCerrarAplicacion();
+//				super.windowClosing(e);
+//			}
+//		});
 	}
 	
 	//VENTANA FLOTANTE CIERRE VISTA*/
 	//TODO: eliminar para la entrega
-	private void confirmarCerrarAplicacion() {
-		int opt = JOptionPane.showConfirmDialog(MainWindow.this, "Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
-		if(opt == 0) 
-			MainWindow.this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		else 
-			MainWindow.this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-	}
+//	private void confirmarCerrarAplicacion() {
+//		int opt = JOptionPane.showConfirmDialog(MainWindow.this, "Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
+//		if(opt == 0) 
+//			MainWindow.this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+//		else 
+//			MainWindow.this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+//	}
 	
 	private JPanel createViewPanel(JComponent c, String title) {
 		JPanel p = new JPanel(new BorderLayout());

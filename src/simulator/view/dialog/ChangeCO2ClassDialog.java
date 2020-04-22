@@ -16,12 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import simulator.control.Controller;
-import simulator.factories.SetContClassEventBuilder;
-import simulator.factories.SetWeatherEventBuilder;
 import simulator.misc.Pair;
 import simulator.model.Event;
 import simulator.model.NewSetContClassEvent;
@@ -33,7 +28,6 @@ public class ChangeCO2ClassDialog extends JDialog{
 	
 	private Controller _ctrl;
 	private RoadMap _map;
-	private List<Event> _events;
 	private int _ticks;
 	private int _time;
 
@@ -55,7 +49,6 @@ public class ChangeCO2ClassDialog extends JDialog{
     public ChangeCO2ClassDialog(Controller ctrl, RoadMap map, List<Event> events, int time) {
     	_ctrl = ctrl;
     	_map = map;
-    	_events = events;
     	_time = time;
     	initGUI();     
     }
@@ -111,10 +104,12 @@ public class ChangeCO2ClassDialog extends JDialog{
 	private void addFeatures() {
 		
 		jlVeicle = new JLabel("Vehicle: ");
-				
-		spinnerVehicle = (_map.getVehicles().size()==0) 
-				? new JSpinner() 
-				: new JSpinner(new SpinnerListModel(_map.getVehicles()));
+//		if(_map.getVehicles().size()==0)
+//		throw new ExecutionException("No se han cargado los eventos en RoadMap");
+		spinnerVehicle = new JSpinner(new SpinnerListModel(_map.getVehicles()));		
+//		spinnerVehicle = (_map.getVehicles().size()==0) 
+//				? new JSpinner() 
+//				: new JSpinner(new SpinnerListModel(_map.getVehicles()));
 		spinnerVehicle.setToolTipText("Vehicle");
 		spinnerVehicle.setPreferredSize(new Dimension(80, 20));
 

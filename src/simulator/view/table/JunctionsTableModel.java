@@ -1,8 +1,6 @@
 package simulator.view.table;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.table.AbstractTableModel;
@@ -69,30 +67,16 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 			String idRoad = "";
 			String idVehicle = "";		
 			
-			for (Map.Entry<Road, List<Vehicle>> entry : _map.getJunctions().get(rowIndex).getRoadQueue().entrySet()) {
-				text += entry.getKey()+":[";
-				for(Vehicle v : entry.getValue()) {
+			for (Entry<Road, List<Vehicle>> mapRoad : _map.getJunctions().get(rowIndex).getRoadQueue().entrySet()) {
+				idRoad = mapRoad.getKey().toString();
+				text += idRoad+":[";
+				for(Vehicle v : mapRoad.getValue()) {
 					idVehicle += v.getId() + ", ";
 					text += idVehicle;
 				}
 				text += "] ";
 			}
 			
-//			Iterator<Entry<Road, List<Vehicle>>> it = _map.getJunctions().get(rowIndex).getRoadQueue().entrySet().iterator();
-//			for (Road r : _map.getRoads()) {
-//				if(_map.getJunctions().get(rowIndex).getIncomingRoadsList().contains(r)) {
-//				text += r.getId()+":[";
-//				while (it.hasNext()) {
-//					Entry<Road, List<Vehicle>> e = it.next();
-//					for(Vehicle v : e.getValue())
-//						idVehicle += v.getId() + ", ";
-//					text += idVehicle;
-//				}
-//				text += "] ";
-//				}
-//			}
-				
-	
 			s = text;
 			break;
 		}

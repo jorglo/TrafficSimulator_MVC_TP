@@ -8,7 +8,6 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -16,7 +15,6 @@ import javax.swing.JPanel;
 
 import simulator.control.Controller;
 import simulator.model.Event;
-import simulator.model.Junction;
 import simulator.model.Road;
 import simulator.model.RoadMap;
 import simulator.model.TrafficSimObserver;
@@ -38,7 +36,6 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 
 	private RoadMap _map;
 	private Image _car;
-	private List<Junction> j_src = new ArrayList<Junction>();
 	
 	MapByRoadComponent(Controller ctrl) {
 		initGUI();
@@ -64,15 +61,12 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			g.setColor(Color.red);
 			g.drawString("No map yet!", getWidth() / 2 - 50, getHeight() / 2);
 		} else {
-			//updatePrefferedSize();
 			drawMap(g);
 		}
 	}
 	
 	private void drawMap(Graphics g) {
 		drawRoads(g);
-		//drawJunctions(g);
-		//drawVehicles(g);
 	}
 	
 	private void drawRoads(Graphics g) {
@@ -91,9 +85,6 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			r.getSrcJunc().set_yCoorBR(y1);
 			r.getDestJunc().set_xCoorBR(x2);
 			r.getDestJunc().set_yCoorBR(y1);
-			
-			//save the SrcJunc in the j_src List
-//			j_src.add(r.getSrcJunc());
 			
 			// draw a circle with center at (x,y) with radius _JRADIUS
 			g.setColor(_JUNCTION_COLOR);
@@ -118,8 +109,8 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			//draw line road
 			g.drawLine(x1, y1, x2, y2);
 			
-			g.setColor(_String_ROAD_COLOR);
 			//draw road id
+			g.setColor(_String_ROAD_COLOR);
 			g.drawString(r.getId(), x1-30, y1);
 			
 			//draw Weather
@@ -191,34 +182,6 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 		
 		g.drawImage(imgC02, x-10, y-15, 32, 32, this);
 		
-	}
-
-	private void drawJunctions(Graphics g) {
-		
-		for (Junction j : _map.getJunctions()) {
-
-			// (x,y) are the coordinates of the junction
-			int x = j.get_xCoorBR();
-			int y = j.get_yCoorBR();
-			
-			if(j_src.contains(j)) {
-				// draw a circle with center at (x,y) with radius _JRADIUS
-				g.setColor(_JUNCTION_COLOR);
-				g.fillOval(x - _JRADIUS / 2, y - _JRADIUS / 2, _JRADIUS, _JRADIUS);
-			}
-			else {
-				// draw a circle with center at (x,y) with radius _JRADIUS
-				g.fillOval(x - _JRADIUS / 2, y - _JRADIUS / 2, _JRADIUS, _JRADIUS);
-
-				// draw the junction's identifier at (x,y)
-				if(j.getGreenLightIndex() == 0)
-					g.setColor(_GREEN_LIGHT_COLOR);
-				else
-					g.setColor(_RED_LIGHT_COLOR);
-			}
-			
-			g.drawString(j.getId(), x, y);
-		}
 	}
 	
 	//DUDA: no hace el movimiento del coche bien.

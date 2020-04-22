@@ -19,7 +19,6 @@ import javax.swing.SpinnerNumberModel;
 import simulator.control.Controller;
 import simulator.misc.Pair;
 import simulator.model.Event;
-import simulator.model.NewSetContClassEvent;
 import simulator.model.NewSetWeatherEvent;
 import simulator.model.RoadMap;
 import simulator.model.Weather;
@@ -30,7 +29,6 @@ public class ChangeWeatherDialog extends JDialog{
 	
 	private Controller _ctrl;
 	private RoadMap _map;
-	private List<Event> _events;
 	private int _ticks;
 	private int _time;
 
@@ -52,7 +50,6 @@ public class ChangeWeatherDialog extends JDialog{
     public ChangeWeatherDialog(Controller ctrl, RoadMap map, List<Event> events, int time) {
     	_ctrl = ctrl;
     	_map = map;
-    	_events = events;
     	_time = time;
     	initGUI();     
     }
@@ -108,9 +105,12 @@ public class ChangeWeatherDialog extends JDialog{
 	private void addFeatures() {
 		
 		jlRoad = new JLabel("Road: ");
-		spinnerRoad = (_map.getVehicles().size()==0) 
-				? new JSpinner() 
-				: new JSpinner(new SpinnerListModel(_map.getRoads()));
+//		if(_map.getVehicles().size()==0)
+//			throw new ExecutionException("No se han cargado los eventos en RoadMap");
+		spinnerRoad = new JSpinner(new SpinnerListModel(_map.getRoads()));
+//		spinnerRoad = (_map.getVehicles().size()==0) 
+//				? new JSpinner() 
+//				: new JSpinner(new SpinnerListModel(_map.getRoads()));
 		spinnerRoad.setToolTipText("Road");
 		spinnerRoad.setPreferredSize(new Dimension(50, 20));
 
