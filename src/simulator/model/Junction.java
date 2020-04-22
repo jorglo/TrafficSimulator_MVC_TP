@@ -235,12 +235,6 @@ public class Junction extends SimulatedObject
 
 	public void set_yCoorBR(int _yCoorBR) {
 		this._yCoorBR = _yCoorBR;
-	}
-
-	public List<List<Vehicle>> getListQueues() {
-		return listQueues;
-	}
-	
-	
+	}	
 	
 }

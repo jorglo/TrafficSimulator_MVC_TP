@@ -57,7 +57,7 @@ public class MainWindow extends JFrame {
 		mapView.setPreferredSize(new Dimension(500, 400));
 		mapByRoadsView.setPreferredSize(new Dimension(500, 400));
 		
-		//a�adimos los paneles
+		//anadimos los paneles
 		this.setContentPane(mainPanel);
 		mainPanel.add(new ControlPanel(_ctrl), BorderLayout.PAGE_START);
 		mainPanel.add(viewsPanel, BorderLayout.CENTER);
@@ -78,27 +78,7 @@ public class MainWindow extends JFrame {
 		this.pack();
 		this.setBounds(300, 100, 1200, 700);
 		this.setVisible(true);
-		
-		//accion para la confirmacion de cerrar la ventana
-		//TODO: eliminar para la entrega
-//		addWindowListener(new WindowAdapter() {
-//			@Override
-//			public void windowClosing(WindowEvent e) {
-//				confirmarCerrarAplicacion();
-//				super.windowClosing(e);
-//			}
-//		});
 	}
-	
-	//VENTANA FLOTANTE CIERRE VISTA*/
-	//TODO: eliminar para la entrega
-//	private void confirmarCerrarAplicacion() {
-//		int opt = JOptionPane.showConfirmDialog(MainWindow.this, "Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
-//		if(opt == 0) 
-//			MainWindow.this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//		else 
-//			MainWindow.this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-//	}
 	
 	private JPanel createViewPanel(JComponent c, String title) {
 		JPanel p = new JPanel(new BorderLayout());

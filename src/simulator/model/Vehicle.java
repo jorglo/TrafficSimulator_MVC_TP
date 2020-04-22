@@ -111,12 +111,13 @@ public class Vehicle extends SimulatedObject{
 			
 			if(this.road != null) 
 	    		this.road.exit(this);
-			
+			//TODO: quitar por que no vale para nada, 
+			// el coche se elimina de listQueue en junction
 			//.. comprobamos que no se va a andir a la primera carretera y borramos el vehiculo de la lista anterior
-			if(junctionIndex != 0) {
-				this.road.getVehicleList().remove(this);
-				//this.road.getDestJunc().getRoadQueue().remove(this.road);
-			}
+//			if(junctionIndex != 0) {
+//				this.road.getVehicleList().remove(this);
+//				//this.road.getDestJunc().getRoadQueue().remove(this.road);
+//			}
 			
 			//.. anadimos los nuevos valores del coche
 	        this.road = this.itinerary
@@ -197,9 +198,6 @@ public class Vehicle extends SimulatedObject{
 
 	public int getTotalTravelledDistance() {
 		return totalTravelledDistance;
-	}
-	
-	
-	
+	}	
 	
 }

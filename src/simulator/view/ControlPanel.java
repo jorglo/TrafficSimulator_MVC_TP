@@ -84,10 +84,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		//declaramos su organizacion dentro del panel contenedor
 		jpToolBar1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		//a�adimos las caracteristicas
+		//anadimos las caracteristicas
 		jpToolBar1.setPreferredSize(new Dimension(1100, 50));
 		
-		// a�adimos los componentes
+		// anadimos los componentes
 		addToolBar1();
 		addToolBar2();
 		addToolBar3();
@@ -100,10 +100,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		//declaramos su organizacion dentro del panel contenedor
 		jpToolBar2.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		// a�adimos los componentes
+		// anadimos los componentes
 		addToolBar4();
 		
-		// a�adimos paneles
+		// anadimos paneles
 		this.add(jpToolBar1);
 		this.add(jpToolBar2);
 		
@@ -125,7 +125,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// le indicamos la posicion
 		toolBar1.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		// a�adimos los botones al panel
+		// anadimos los botones al panel
 		toolBar1.add(openButton);
 		jpToolBar1.add(toolBar1);
 
@@ -153,7 +153,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// le indicamos la posicion
 		toolBar2.setLayout(new FlowLayout(FlowLayout.LEFT));
 			
-		// a�adimos los botones al panel
+		// anadimos los botones al panel
 		toolBar2.add(co2classButton);
 		toolBar2.add(weatherButton);
 		jpToolBar1.add(toolBar2);
@@ -186,7 +186,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// le indicamos la posicion
 		toolBar3.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		// a�adimos los botones al panel
+		// anadimos los botones al panel
 		toolBar3.add(runButton);
 		toolBar3.add(stopButton);
 		toolBar3.add(stepsLabel);
@@ -212,7 +212,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// le indicamos la posicion
 		toolBar4.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
-		// a�adimos los botones al panel
+		// anadimos los botones al panel
 		toolBar4.add(quitButton);
 		jpToolBar2.add(toolBar4);
 
@@ -283,8 +283,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 				_ctrl.run(1);
 				enableToolBar( false );
 			} catch (Exception e ) {
-				// TODO show error message
-				//System.out.println(e);
 				_stopped = true ;
 				return ;
 			}
@@ -358,7 +356,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 
 	@Override
 	public void onError(String err) {
-		// TODO onError en ControlPanel
 		
 	}
 

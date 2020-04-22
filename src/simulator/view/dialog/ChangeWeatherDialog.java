@@ -174,17 +174,4 @@ public class ChangeWeatherDialog extends JDialog{
 
 	}
 
-	/* 
-    * PARA PROBAR EL DIALOGO SIN PROBAR TODA LA APLICACION COMPLETA 
-    */
-//	public static void main(String[] args) {
-//        try {
-//        	ChangeWeatherDialog dialog = new ChangeWeatherDialog();
-//            dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//            dialog.setVisible(true);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 }
