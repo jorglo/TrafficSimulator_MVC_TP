@@ -177,11 +177,14 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		stopButton.setToolTipText("Stop");
 		stopButton.addActionListener(this);
 		
-		ticksSpinner = new JSpinner(new SpinnerNumberModel(10, 10, 1000,1));
+		ticksSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 1000,1));
 		JLabel stepsLabel = new JLabel("Ticks: ");
 		ticksSpinner.setToolTipText("Ticks");
 		ticksSpinner.setPreferredSize(new Dimension(60, 30));
+<<<<<<< HEAD
 		
+=======
+>>>>>>> branch 'master' of https://github.com/jorglo/TrafficSimulator_MVC_TP.git
 		
 		// le indicamos la posicion
 		toolBar3.setLayout(new FlowLayout(FlowLayout.LEFT));

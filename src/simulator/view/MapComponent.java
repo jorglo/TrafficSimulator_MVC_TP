@@ -21,7 +21,6 @@ import simulator.model.TrafficSimObserver;
 import simulator.model.Vehicle;
 import simulator.model.VehicleStatus;
 
-//DUDA: MapComponent no funciona!!!
 public class MapComponent extends JPanel implements TrafficSimObserver {
 
 	private static final long serialVersionUID = 1L;
@@ -207,7 +206,7 @@ public class MapComponent extends JPanel implements TrafficSimObserver {
 	private Image loadImage(String img) {
 		Image i = null;
 		try {
-			return ImageIO.read(new File("icons/" + img));
+			return ImageIO.read(new File("resources/icons/" + img));
 		} catch (IOException e) {
 		}
 		return i;

@@ -30,6 +30,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 	
 	private static final int _JRADIUS = 10;
 	
+	private static final Color _String_ROAD_COLOR = Color.BLACK;
 	private static final Color _BG_COLOR = Color.WHITE;
 	private static final Color _JUNCTION_COLOR = Color.BLUE;
 	private static final Color _GREEN_LIGHT_COLOR = Color.GREEN;
@@ -70,8 +71,8 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 	
 	private void drawMap(Graphics g) {
 		drawRoads(g);
-		drawJunctions(g);
-		drawVehicles(g);
+		//drawJunctions(g);
+		//drawVehicles(g);
 	}
 	
 	private void drawRoads(Graphics g) {
@@ -89,29 +90,35 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			r.getSrcJunc().set_xCoorBR(x1);
 			r.getSrcJunc().set_yCoorBR(y1);
 			r.getDestJunc().set_xCoorBR(x2);
-			r.getDestJunc().set_yCoorBR(y2);
+			r.getDestJunc().set_yCoorBR(y1);
 			
 			//save the SrcJunc in the j_src List
-			j_src.add(r.getSrcJunc());
+//			j_src.add(r.getSrcJunc());
 			
-			// choose a color for the arrow depending on the traffic light of the road
-			Color arrowColor = _RED_LIGHT_COLOR;
+			// draw a circle with center at (x,y) with radius _JRADIUS
+			g.setColor(_JUNCTION_COLOR);
+			g.fillOval(x1 - _JRADIUS / 2, y1 - _JRADIUS / 2, _JRADIUS, _JRADIUS);
+			
+			// draw the junction's identifier at (x2,y2)
 			int idx = r.getDestJunc().getGreenLightIndex();
-			if (idx != -1 && r.equals(r.getDestJunc().getInRoads().get(idx))) {
-				arrowColor = _GREEN_LIGHT_COLOR;
-			}
+			if (idx != -1 && r.equals(r.getDestJunc().getInRoads().get(idx)))
+				g.setColor(_GREEN_LIGHT_COLOR);
+			else
+				g.setColor(_RED_LIGHT_COLOR);
+			
+			// draw a circle with center at (x,y) with radius _JRADIUS
+			g.fillOval(x2 - _JRADIUS / 2, y2 - _JRADIUS / 2, _JRADIUS, _JRADIUS);
 
 			// choose a color for the road depending on the total contamination, the darker
-			// the
-			// more contaminated (wrt its co2 limit)
+			// the more contaminated (wrt its co2 limit)
 			int roadColorValue = 200 - (int) (200.0 * Math.min(1.0, (double) r.getTotalCO2() / (1.0 + (double) r.getCO2Limit())));
 			Color roadColor = new Color(roadColorValue, roadColorValue, roadColorValue);
-
-			// draw line from (x1,y1) to (x2,y2) with arrow of color arrowColor and line of
-			// color roadColor. The size of the arrow is 15px length and 5 px width
-			drawLineWithArrow(g, x1, y1, x2, y2, 15, 5, roadColor, arrowColor);
-			//g.drawLine(x1, y1, x2, y2);
+			g.setColor(roadColor);
+	
+			//draw line road
+			g.drawLine(x1, y1, x2, y2);
 			
+			g.setColor(_String_ROAD_COLOR);
 			//draw road id
 			g.drawString(r.getId(), x1-30, y1);
 			
@@ -120,6 +127,8 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			
 			//draw CO2
 			drawCO2(g,x2+60, y2, r);
+			
+			drawVehicles(g, r);
 			
 			i++;
 		}
@@ -213,7 +222,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 	}
 	
 	//DUDA: no hace el movimiento del coche bien.
-	private void drawVehicles(Graphics g) {
+	private void drawVehicles(Graphics g, Road r2) {
 		for (Vehicle v : _map.getVehicles()) {
 			if (v.getStatus() != VehicleStatus.ARRIVED) {
 
@@ -221,104 +230,35 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 				// corresponding road. It is calculated relativly to the length of the road, and
 				// the location on the vehicle.
 				Road r = v.getRoad();
-				int x1 = r.getSrcJunc().get_xCoorBR();
-				int y1 = r.getSrcJunc().get_yCoorBR();
-				int x2 = r.getDestJunc().get_xCoorBR();
-				int y2 = r.getDestJunc().get_yCoorBR();
-				double roadLength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
-				double alpha = Math.atan(((double) Math.abs(x1 - x2)) / ((double) Math.abs(y1 - y2)));
-				double relLoc = roadLength * ((double) v.getLocation()) / ((double) r.getLength());
-				//double x = Math.sin(alpha) * relLoc;
-				double x = x1 + ( int ) ((x2 - x1) * (( double ) relLoc / ( double ) roadLength));
-				double y = Math.cos(alpha) * relLoc;
-				int xDir = x1 <= x2 ? 1 : -1;
-				int yDir = y1 < y2 ? 1 : -1;
+				if(r == r2) {
+					int x1 = r.getSrcJunc().get_xCoorBR();
+					int y1 = r.getSrcJunc().get_yCoorBR();
+					int x2 = r.getDestJunc().get_xCoorBR();
+					int y2 = r.getDestJunc().get_yCoorBR();
+					double roadLength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+					double alpha = Math.atan(((double) Math.abs(x1 - x2)) / ((double) Math.abs(y1 - y2)));
+					double relLoc = roadLength * ((double) v.getLocation()) / ((double) r.getLength());
+					//double x = Math.sin(alpha) * relLoc;
+					double x = x1 + ( int ) ((x2 - x1) * (( double ) relLoc / ( double ) roadLength));
+					double y = Math.cos(alpha) * relLoc;
+					int xDir = x1 < x2 ? 1 : -1;
+					int yDir = y1 < y2 ? 1 : -1;
 
-				int vX = x1 + xDir * ((int) x);
-				int vY = y1 + yDir * ((int) y);
+					int vX = x1 + xDir * ((int) x);
+					int vY = y1 + yDir * ((int) y);
 
-				// Choose a color for the vehcile's label and background, depending on its
-				// contamination class
-				int vLabelColor = (int) (25.0 * (10.0 - (double) v.getCO2()));
-				g.setColor(new Color(0, vLabelColor, 0));
+					// Choose a color for the vehcile's label and background, depending on its
+					// contamination class
+					int vLabelColor = (int) (25.0 * (10.0 - (double) v.getCO2()));
+					g.setColor(new Color(0, vLabelColor, 0));
 
-				// draw an image of a car (with circle as background) and it identifier
-				g.drawImage(_car, vX, vY-20, 16, 16, this);
-				g.drawString(v.getId(), vX, vY-20);
-				
+					// draw an image of a car (with circle as background) and it identifier
+					g.drawImage(_car, vX - 60, vY-11, 16, 16, this);
+					g.drawString(v.getId(), vX - 60, vY-11);
+					
+				}
 			}
 		}
-	}
-	
-//	private void drawVehicles(Graphics g) {
-//		for (Vehicle v : _map.getVehicles()) {
-//			if (v.getStatus() != VehicleStatus.ARRIVED) {
-//
-//				// The calculation below compute the coordinate (vX,vY) of the vehicle on the
-//				// corresponding road. It is calculated relativly to the length of the road, and
-//				// the location on the vehicle.
-//				Road r = v.getRoad();
-//				int x1 = r.getSrcJunc().get_xCoorBR();
-//				int y1 = r.getSrcJunc().get_yCoorBR();
-//				int x2 = r.getDestJunc().get_xCoorBR();
-//				int y2 = r.getDestJunc().get_yCoorBR();
-//				double roadLength = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-//				double alpha = Math.atan(((double) Math.abs(x2 - x1)) / ((double) Math.abs(y2 - y1)));
-//				double relLoc = roadLength * ((double) v.getLocation()) / ((double) r.getLength());
-//				//double x = Math.sin(alpha) * relLoc;
-//				double y = Math.cos(alpha) * relLoc;
-//				int xDir = x1 < x2 ? 1 : -1;
-//				int yDir = y1 < y2 ? 1 : -1;
-//				
-//				double A = v.getLocation();
-//				double B = roadLength;
-//
-//				int x = x1 + ( int ) ((x2 - x1) * (( double ) A / ( double ) B));
-//				int vX = x1 + xDir * ((int) x);
-//				int vY = y1 + yDir * ((int) y);
-//
-//				// Choose a color for the vehcile's label and background, depending on its
-//				// contamination class
-//				int vLabelColor = (int) (25.0 * (10.0 - (double) v.getCO2()));
-//				g.setColor(new Color(0, vLabelColor, 0));
-//
-//				// draw an image of a car and it identifier
-//				g.drawImage(_car, vX+60, vY, 16, 16, this);
-//				g.drawString(v.getId(), vX+60, vY);
-//			}
-//		}
-//	}
-	
-	// This method draws a line from (x1,y1) to (x2,y2) with an arrow.
-	// The arrow is of height h and width w.
-	// The last two arguments are the colors of the arrow and the line
-	private void drawLineWithArrow(//
-			Graphics g, //
-			int x1, int y1, //
-			int x2, int y2, //
-			int w, int h, //
-			Color lineColor, Color arrowColor) {
-
-		int dx = x2 - x1, dy = y2 - y1;
-		double D = Math.sqrt(dx * dx + dy * dy);
-		double xm = D - w, xn = xm, ym = h, yn = -h, x;
-		double sin = dy / D, cos = dx / D;
-
-		x = xm * cos - ym * sin + x1;
-		ym = xm * sin + ym * cos + y1;
-		xm = x;
-
-		x = xn * cos - yn * sin + x1;
-		yn = xn * sin + yn * cos + y1;
-		xn = x;
-
-		int[] xpoints = { x2, (int) xm, (int) xn };
-		int[] ypoints = { y2, (int) ym, (int) yn };
-
-		g.setColor(lineColor);
-		g.drawLine(x1, y1, x2, y2);
-		g.setColor(arrowColor);
-		g.fillPolygon(xpoints, ypoints, 3);
 	}
 	
 	// loads an image from a file
