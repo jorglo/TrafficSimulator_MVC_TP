@@ -177,11 +177,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		stopButton.setToolTipText("Stop");
 		stopButton.addActionListener(this);
 		
-		ticksSpinner = new JSpinner(new SpinnerNumberModel(10, 10, 1000,1));
+		ticksSpinner = new JSpinner(new SpinnerNumberModel(10, 1, 1000,1));
 		JLabel stepsLabel = new JLabel("Ticks: ");
 		ticksSpinner.setToolTipText("Ticks");
 		ticksSpinner.setPreferredSize(new Dimension(60, 30));
-		_ticks = (int) ticksSpinner.getValue();
 		
 		// le indicamos la posicion
 		toolBar3.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -231,6 +230,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		else if (WEATHER.equals(e.getActionCommand()))
 			weather();
 		else if (RUN.equals(e.getActionCommand())) {
+			_ticks = (int) ticksSpinner.getValue();
 			run_sim(_ticks); 
 			_stopped = false;
 		}

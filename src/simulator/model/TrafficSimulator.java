@@ -70,7 +70,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	
 	public void reset() {
 		_eventsList.clear();
-		_roadMap = null;
+		_roadMap = new RoadMap();
 		_simulationTime = 0;
 		onReset(_roadMap, _eventsList, _simulationTime);
 	}
