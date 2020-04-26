@@ -57,9 +57,6 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
     	
     	//caracteristicas de la caja dialog
     	this.add(sbPanel);
-    	//sbPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
-    	//sbPanel.setBackground(Color.green);
-    	//etBackground(Color.blue);
 		this.setVisible(true);
 	}
 
@@ -67,13 +64,11 @@ public class StatusBar extends JPanel implements TrafficSimObserver{
 		this.jlTime = new JLabel();
 		timePanel.add(jlTime);	
 		timePanel.setAlignmentX(LEFT_ALIGNMENT);
-		//timePanel.setBackground(Color.gray);
 	}
 
 	private void addStatusBarEvents() {
 		this.jlEvents = new JLabel();
 		this.eventsPanel.add(jlEvents);
-		//eventsPanel.setBackground(Color.white);
 	}
 
 	public void update(List<Event> events, int time) {

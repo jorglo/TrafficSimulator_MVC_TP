@@ -43,7 +43,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	JPanel jpToolBar1;
 	JPanel jpToolBar2;
 	
-	
 	//JTOOLBAR
 	//private JToolBar toolBar; 
 	private JToolBar toolBar1;
@@ -76,13 +75,13 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	public void initGUI() {
 		
-		// -- jpToolBar 1 --
-		
 		//instanciamos el panel
-		jpToolBar1 = new JPanel();
+		jpToolBar1 = new JPanel(); // Open, CO2class, Weather, Run, Stop y Ticks
+		jpToolBar2 = new JPanel(); // Quit
 		
 		//declaramos su organizacion dentro del panel contenedor
 		jpToolBar1.setLayout(new FlowLayout(FlowLayout.LEFT));
+		jpToolBar2.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		//anadimos las caracteristicas
 		jpToolBar1.setPreferredSize(new Dimension(1100, 50));
@@ -91,25 +90,14 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		addToolBar1();
 		addToolBar2();
 		addToolBar3();
-		
-		// -- jpToolBar 2 --
-		
-		//instanciamos el panel
-		jpToolBar2 = new JPanel();
-		
-		//declaramos su organizacion dentro del panel contenedor
-		jpToolBar2.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
-		// anadimos los componentes
 		addToolBar4();
 		
 		// anadimos paneles
 		this.add(jpToolBar1);
-		this.add(jpToolBar2);
-		
+		this.add(jpToolBar2);	
 	}
 
-	//BOTONERA
+	//BOTONERA: Open
 	public void addToolBar1() {
 		
 		//instanciamos el componente
@@ -133,8 +121,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// *SU FUNCIONALIDAD DE DEFINE EN actionPerformed!!  //
 		// ------------------------------------------------- //
 	}
+	
+	//BOTONERA: CO2class y Weather
 	public void addToolBar2() {
-		
+		// DUDA: botones bloqueados hasta que se carguen los eventos
 		//instanciamos el componente
 		toolBar2 = new JToolBar();
 		toolBar2.setFloatable(true);
@@ -142,12 +132,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// Creamos los botones con sus imagenes y caracteristicas
 		co2classButton = new JButton(new ImageIcon("icons/co2class.png"));
 		co2classButton.setActionCommand(CO2CLASS);
-		co2classButton.setToolTipText("co2class");
+		co2classButton.setToolTipText("CO2class");
 		co2classButton.addActionListener(this);
 		
 		weatherButton = new JButton(new ImageIcon("icons/weather.png"));
 		weatherButton.setActionCommand(WEATHER);
-		weatherButton.setToolTipText("weather");
+		weatherButton.setToolTipText("Weather");
 		weatherButton.addActionListener(this);
 		
 		// le indicamos la posicion
@@ -162,6 +152,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// *SU FUNCIONALIDAD DE DEFINE EN actionPerformed!!  //
 		// ------------------------------------------------- //
 	}
+	
+	//BOTONERA: Run, Stop y Ticks
 	public void addToolBar3() {
 		toolBar3 = new JToolBar();
 		toolBar3.setFloatable(true);
@@ -197,6 +189,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		// *SU FUNCIONALIDAD DE DEFINE EN actionPerformed!!  //
 		// ------------------------------------------------- //
 	}
+	
+	//BOTONERA: Quit
 	public void addToolBar4() {
 		
 		//instanciamos el componente
@@ -241,7 +235,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 			quit();
 	}
 	
-	/**CARGAR FICHERO*/
+	/** Medoto para CARGAR FICHERO*/
 	private void OpenFile() {
 		InputStream inputStream = null;
 		int returnVal = fc.showOpenDialog(null);
@@ -257,9 +251,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		}
 	}
 	
-	/**CONTAMINACION*/
+	/** Metodo para cambiar en CO2*/
 	private void co2class() {
-		
 		if(_map.getVehicles().size()!=0) {
 			ChangeCO2ClassDialog dialogco2 = new ChangeCO2ClassDialog(_ctrl, _map, _events, _time);
         	dialogco2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -267,7 +260,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		}
 	}
 	
-	/**CONDICIONES METEOROLOGICAS*/
+	/** Metodo para cabiar las CONDICIONES METEOROLOGICAS*/
 	private void weather() {
 		if(_map.getVehicles().size()!=0) {
 			ChangeWeatherDialog dialogWeather = new ChangeWeatherDialog(_ctrl, _map, _events, _time);
@@ -276,7 +269,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		}
 	}
 	
-	/**EJECUTAR SIMULACION*/
+	/** Metodo para EJECUTAR SIMULACION*/
 	private void run_sim( int n ) {
 		if ( n > 0 && ! _stopped ) {
 			try {
@@ -307,12 +300,12 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		quitButton.setEnabled(enable);
 	}
 
-	/**PARAR LA SIMULACION*/
+	/** Metodo para DETENER LA SIMULACION*/
 	private void stop() {
 		_stopped = true ;
 	}
 	
-	/**CERRAR LA APLICACION*/
+	/** Metodo para CERRAR LA APLICACION*/
 	private void quit() {
 		int opt = JOptionPane.showConfirmDialog(this, "Estas seguro que quieres salir?", "salir", JOptionPane.YES_NO_OPTION);
 		if(opt == 0) 
@@ -361,7 +354,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 
 }
 
-// TODOS LOS ELEMENTOS JUNTOS
+//DUDA: TODOS LOS ELEMENTOS JUNTOS, IMPLEMENTADO POR SEPARADO PARA QUE SE PAREZCA A LA IMAGEN
 
 //public void addToolBar() {
 //	toolBar = new JToolBar();
@@ -416,7 +409,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 //	
 //	quitButton.setAlignmentX(RIGHT_ALIGNMENT);
 //	
-//	//JORGE: colocar ControlPanel
 //	// le indicamos la posicion
 //	toolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
 //	toolBar.setAlignmentX(LEFT_ALIGNMENT);

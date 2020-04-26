@@ -54,7 +54,6 @@ public class Controller {
 						
 	}
 	
-	//DUDA: metodo run creado con un solo argumento por que lo ped�a en la vista
 	/**
 	 * ejecutar la aplicacion por la interfaz grafica
 	 * @param n

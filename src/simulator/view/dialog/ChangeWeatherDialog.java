@@ -90,7 +90,6 @@ public class ChangeWeatherDialog extends JDialog{
         setResizable(false);
 		pack();
 		setVisible(true);
- 
 	}
 
 	private void addDescription() {
@@ -105,12 +104,7 @@ public class ChangeWeatherDialog extends JDialog{
 	private void addFeatures() {
 		
 		jlRoad = new JLabel("Road: ");
-//		if(_map.getVehicles().size()==0)
-//			throw new ExecutionException("No se han cargado los eventos en RoadMap");
 		spinnerRoad = new JSpinner(new SpinnerListModel(_map.getRoads()));
-//		spinnerRoad = (_map.getVehicles().size()==0) 
-//				? new JSpinner() 
-//				: new JSpinner(new SpinnerListModel(_map.getRoads()));
 		spinnerRoad.setToolTipText("Road");
 		spinnerRoad.setPreferredSize(new Dimension(50, 20));
 
@@ -148,7 +142,7 @@ public class ChangeWeatherDialog extends JDialog{
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-        	//TODO: implementar el nuevo evento de ChangeWeatherDialog
+        	
         	List<Pair<String, Weather>> contClass = new ArrayList<Pair<String,Weather>>();
     		String first;
     		Weather second;
@@ -168,6 +162,7 @@ public class ChangeWeatherDialog extends JDialog{
         	dispose();
         	}
         });
+        
         okButton.setActionCommand("OK");
         dialogPanelButtons.add(okButton);
         getRootPane().setDefaultButton(okButton);

@@ -104,12 +104,7 @@ public class ChangeCO2ClassDialog extends JDialog{
 	private void addFeatures() {
 		
 		jlVeicle = new JLabel("Vehicle: ");
-//		if(_map.getVehicles().size()==0)
-//		throw new ExecutionException("No se han cargado los eventos en RoadMap");
 		spinnerVehicle = new JSpinner(new SpinnerListModel(_map.getVehicles()));		
-//		spinnerVehicle = (_map.getVehicles().size()==0) 
-//				? new JSpinner() 
-//				: new JSpinner(new SpinnerListModel(_map.getVehicles()));
 		spinnerVehicle.setToolTipText("Vehicle");
 		spinnerVehicle.setPreferredSize(new Dimension(80, 20));
 
@@ -147,7 +142,6 @@ public class ChangeCO2ClassDialog extends JDialog{
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-        	//DUDA: evento de ChangeCO2ClassDialog
     
         	List<Pair<String, Integer>> contClass = new ArrayList<Pair<String,Integer>>();
     		String first;
@@ -163,7 +157,8 @@ public class ChangeCO2ClassDialog extends JDialog{
     			
     			_ticks = (int)spinnerTicks.getValue();
     			int newTime = _time + _ticks;
-    			
+    		
+    		//DUDA: se crea aqui el evento?	
         	_ctrl.addEvent(new NewSetContClassEvent(newTime, contClass));
         	dispose();
         	}

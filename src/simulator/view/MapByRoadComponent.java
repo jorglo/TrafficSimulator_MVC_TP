@@ -66,10 +66,10 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 	}
 	
 	private void drawMap(Graphics g) {
-		drawRoads(g);
+		drawRoads_and_Junctions(g);
 	}
 	
-	private void drawRoads(Graphics g) {
+	private void drawRoads_and_Junctions(Graphics g) {
 		int i = 0;
 		
 		for (Road r : _map.getRoads()) {
@@ -80,6 +80,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			int x2 = getWidth()-100;
 			int y2 = (i+1)*50;
 			
+			//DUDA: solucion buena?
 			// set de new position in the map by road.
 			r.getSrcJunc().set_xCoorBR(x1);
 			r.getSrcJunc().set_yCoorBR(y1);
@@ -184,7 +185,6 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 		
 	}
 	
-	//DUDA: no hace el movimiento del coche bien.
 	private void drawVehicles(Graphics g, Road r2) {
 		for (Vehicle v : _map.getVehicles()) {
 			if (v.getStatus() != VehicleStatus.ARRIVED) {

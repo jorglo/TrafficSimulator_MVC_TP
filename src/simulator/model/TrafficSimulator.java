@@ -29,7 +29,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 */
 	public void addEvent(Event e){		
 		_eventsList.add(e);
-		onEventAdded(_roadMap, _eventsList, e, _simulationTime); //TODO ALVARO innecesario
+		onEventAdded(_roadMap, _eventsList, e, _simulationTime); 
 	}
 	
 	/**
@@ -164,7 +164,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 * @param time
 	 */
 	public void onRegister(RoadMap map, List<Event> events, int time) {
-		for(TrafficSimObserver observer : _observersList) //TODO ALVARO creo que es innecesario
+		for(TrafficSimObserver observer : _observersList) 
 			observer.onRegister(map, events, time);
 	}
 
@@ -179,7 +179,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 * @param err
 	 */
 	public void onError(String err) {
-		for(TrafficSimObserver observer : _observersList) //TODO ALVARO creo que es innecesario
+		for(TrafficSimObserver observer : _observersList) 
 			observer.onError(err);
 	}
 }
