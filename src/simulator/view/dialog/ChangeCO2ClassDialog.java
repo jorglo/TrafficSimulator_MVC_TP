@@ -1,43 +1,38 @@
 package simulator.view.dialog;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
 
-import simulator.control.Controller;
-import simulator.misc.Pair;
-import simulator.model.Event;
-import simulator.model.NewSetContClassEvent;
 import simulator.model.RoadMap;
 
 public class ChangeCO2ClassDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L;
 	
-	private Controller _ctrl;
 	private RoadMap _map;
-	private int _ticks;
-	private int _time;
+
+	public static final int OK = 0;
+	public static final int CANCEL = 1;
+	private int res = -1;
 
 	private JPanel dialogPanel;
 	private JPanel dialogPanelDescription;
-	private JPanel dialogPanelFeatures;
+	private JPanel dialogPanelSpinners;
 	private JPanel dialogPanelButtons;
 	
 	private JLabel jldescription;
-	private JLabel jldescription2;
 	private JLabel jlVeicle;
 	private JLabel jlCO2Class;
 	private JLabel jlTicks;
@@ -45,38 +40,30 @@ public class ChangeCO2ClassDialog extends JDialog{
 	private JSpinner spinnerVehicle;
 	private JSpinner spinnerCO2Class;
 	private JSpinner spinnerTicks;
-	
-    public ChangeCO2ClassDialog(Controller ctrl, RoadMap map, List<Event> events, int time) {
-    	_ctrl = ctrl;
-    	_map = map;
-    	_time = time;
-    	initGUI();     
-    }
 
+    public ChangeCO2ClassDialog(RoadMap map) {
+		super(new JFrame(), "Change CO2 Class", true);
+		_map = map;
+		initGUI();
+	}
+    
     private void initGUI() {
     	
     	//Instanciamos los paneles
-    	dialogPanel = new JPanel();
+    	dialogPanel =new JPanel(new BorderLayout());
     	dialogPanelDescription = new JPanel();
-    	dialogPanelFeatures = new JPanel();
-    	dialogPanelButtons = new JPanel();
+    	dialogPanelSpinners = new JPanel();
+    	dialogPanelButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		
+    	//añadimos los paneles internos
+    	dialogPanel.add(dialogPanelDescription,BorderLayout.NORTH);
+    	dialogPanel.add(dialogPanelSpinners,BorderLayout.CENTER);
+    	dialogPanel.add(dialogPanelButtons,BorderLayout.SOUTH);
     	
-    	//declaramos su organizacion dentro de la ventana
-    	dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
-    	dialogPanelDescription.setLayout(new FlowLayout(FlowLayout.LEFT));
-    	dialogPanelFeatures.setLayout(new FlowLayout(FlowLayout.LEFT));
-    	dialogPanelButtons.setLayout(new FlowLayout(FlowLayout.CENTER));
-    	
-    	//añadimos las caracteristicas
-    	dialogPanelDescription.setPreferredSize(new Dimension(390, 55));
-    	dialogPanelFeatures.setPreferredSize(new Dimension(390, 40));
+    	//anadimos las caracteristicas
+    	dialogPanelDescription.setPreferredSize(new Dimension(420, 55));
+    	dialogPanelSpinners.setPreferredSize(new Dimension(390, 40));
     	dialogPanelButtons.setPreferredSize(new Dimension(390, 40));
-    	
-    	//añadimos los paneles 
-    	this.setContentPane(dialogPanel);
-    	dialogPanel.add(dialogPanelDescription);
-    	dialogPanel.add(dialogPanelFeatures);
-    	dialogPanel.add(dialogPanelButtons);
     	
     	//añadimos los componentes de los Layauts
     	addDescription();
@@ -84,21 +71,18 @@ public class ChangeCO2ClassDialog extends JDialog{
     	addButtons();
     	
     	//caracteristicas de la caja dialog
-        setTitle("Change CO2 Class");
-        setLocation(300, 200);
-        setResizable(false);
-		pack();
-		setVisible(true);
+    	this.setContentPane(dialogPanel);
+        this.setLocation(300, 200);
+        this.setResizable(false);
+		this.pack();
+		this.setVisible(true);
  
 	}
 
 	private void addDescription() {
-		String text1 = "Schedule an event to change the CO2 class of a vehicle after a given";
-		String text2 = "numer of simulation ticks from now.";
-		jldescription = new JLabel(text1);
-		jldescription2 = new JLabel(text2);
+		jldescription = new JLabel("<html><body> Schedule an event to change the CO2 class of a vehicle after a given"
+				+ " <br> numer of simulation ticks from now. </body></html>");
 		dialogPanelDescription.add(jldescription);
-		dialogPanelDescription.add(jldescription2);
 	}
 
 	private void addFeatures() {
@@ -118,12 +102,12 @@ public class ChangeCO2ClassDialog extends JDialog{
 		spinnerTicks.setToolTipText("Ticks");
 		spinnerTicks.setPreferredSize(new Dimension(60, 20));
 		
-		dialogPanelFeatures.add(jlVeicle);
-		dialogPanelFeatures.add(spinnerVehicle);
-		dialogPanelFeatures.add(jlCO2Class);
-		dialogPanelFeatures.add(spinnerCO2Class);
-		dialogPanelFeatures.add(jlTicks);
-		dialogPanelFeatures.add(spinnerTicks);
+		dialogPanelSpinners.add(jlVeicle);
+		dialogPanelSpinners.add(spinnerVehicle);
+		dialogPanelSpinners.add(jlCO2Class);
+		dialogPanelSpinners.add(spinnerCO2Class);
+		dialogPanelSpinners.add(jlTicks);
+		dialogPanelSpinners.add(spinnerTicks);
 	}
 	
 	private void addButtons() {
@@ -132,43 +116,45 @@ public class ChangeCO2ClassDialog extends JDialog{
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
+        	res = CANCEL;
             dispose();
         	}
         });
         cancelButton.setActionCommand("CANCEL");
         dialogPanelButtons.add(cancelButton);
+        getRootPane().setDefaultButton(cancelButton);
 		
         //OK
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-    
-        	List<Pair<String, Integer>> contClass = new ArrayList<Pair<String,Integer>>();
-    		String first;
-    		Integer second;
-    		Pair<String, Integer> coche = null;
-    			
-    			first = spinnerVehicle.getValue().toString();
-    			second = (int) spinnerCO2Class.getValue();
-    			
-    			coche = new Pair<String, Integer>(first, second);
- 
-    			contClass.add(coche);
-    			
-    			_ticks = (int)spinnerTicks.getValue();
-    			int newTime = _time + _ticks;
-    		
-    		//DUDA: se crea aqui el evento?	
-        	_ctrl.addEvent(new NewSetContClassEvent(newTime, contClass));
+        	res = OK;
         	dispose();
         	}
         });
         okButton.setActionCommand("OK");
         dialogPanelButtons.add(okButton);
-        getRootPane().setDefaultButton(okButton);
 
 	}
 
+	public JSpinner getSpinnerVehicle() {
+		return spinnerVehicle;
+	}
+
+	public JSpinner getSpinnerCO2Class() {
+		return spinnerCO2Class;
+	}
+
+	public JSpinner getSpinnerTicks() {
+		return spinnerTicks;
+	}
+
+	public int getRes() {
+		return res;
+	}
+	
+	
+	
 }
 
 

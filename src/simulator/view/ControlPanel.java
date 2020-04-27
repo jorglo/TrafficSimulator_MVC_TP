@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -23,7 +24,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 import simulator.control.Controller;
+import simulator.misc.Pair;
 import simulator.model.Event;
+import simulator.model.NewSetContClassEvent;
 import simulator.model.RoadMap;
 import simulator.model.TrafficSimObserver;
 import simulator.view.dialog.ChangeCO2ClassDialog;
@@ -254,10 +257,32 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	/** Metodo para cambiar en CO2*/
 	private void co2class() {
 		if(_map.getVehicles().size()!=0) {
-			ChangeCO2ClassDialog dialogco2 = new ChangeCO2ClassDialog(_ctrl, _map, _events, _time);
-        	dialogco2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        	dialogco2.setVisible(true);
+			
+			ChangeCO2ClassDialog dialogCO2 = new ChangeCO2ClassDialog(_map);
+			
+			if(dialogCO2.getRes() == 0) {
+				List<Pair<String, Integer>> contClass = new ArrayList<Pair<String,Integer>>();
+    			
+	    		String first = dialogCO2.getSpinnerVehicle().getValue().toString();
+	    		Integer	second = (int) dialogCO2.getSpinnerCO2Class().getValue();
+	    			
+	    		Pair<String, Integer> coche = new Pair<String, Integer>(first, second);
+	 
+	    		contClass.add(coche);
+	    			
+	    		int newTime = _time + (int) dialogCO2.getSpinnerTicks().getValue();
+	    		
+	    		//DUDA: se crea aqui el evento?	
+	        	_ctrl.addEvent(new NewSetContClassEvent(newTime, contClass));
+			}
+   
 		}
+		
+//		if(_map.getVehicles().size()!=0) {
+//			ChangeCO2ClassDialog dialogco2 = new ChangeCO2ClassDialog(_ctrl, _map, _events, _time);
+//        	dialogco2.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//        	dialogco2.setVisible(true);
+//		}
 	}
 	
 	/** Metodo para cabiar las CONDICIONES METEOROLOGICAS*/

@@ -137,7 +137,8 @@ public class ChangeWeatherDialog extends JDialog{
         });
         cancelButton.setActionCommand("CANCEL");
         dialogPanelButtons.add(cancelButton);
-		
+        getRootPane().setDefaultButton(cancelButton);
+        
         //OK
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
@@ -157,7 +158,8 @@ public class ChangeWeatherDialog extends JDialog{
     			
     			_ticks = (int)spinnerTicks.getValue();
     			int newTime = _time + _ticks;
-    			
+    		
+    		//DUDA: se crea aqui el evento?	
         	_ctrl.addEvent(new NewSetWeatherEvent(newTime, contClass));
         	dispose();
         	}
@@ -165,7 +167,6 @@ public class ChangeWeatherDialog extends JDialog{
         
         okButton.setActionCommand("OK");
         dialogPanelButtons.add(okButton);
-        getRootPane().setDefaultButton(okButton);
 
 	}
 
