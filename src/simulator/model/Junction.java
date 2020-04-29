@@ -28,12 +28,6 @@ public class Junction extends SimulatedObject
 	private int _xCoor;								// coordenada x
 	private int _yCoor;								// coordenada y
 	
-	// coordenadas para dibujar 
-	// el cruce en la practica 2 (map).
-	private int _xCoorBR;								// coordenada x
-	private int _yCoorBR;								// coordenada y
-	
-	
 	Junction(String id, LightSwitchingStrategy lsStrategy, DequeuingStrategy dqStrategy, int xCoor, int yCoor) {
 		
 		super(id);
@@ -219,22 +213,6 @@ public class Junction extends SimulatedObject
 
 	public List<Road> getInRoads() {
 		return this.incomingRoadsList;
-	}
-
-	public int get_xCoorBR() {
-		return _xCoorBR;
-	}
-
-	public void set_xCoorBR(int _xCoorBR) {
-		this._xCoorBR = _xCoorBR;
-	}
-
-	public int get_yCoorBR() {
-		return _yCoorBR;
-	}
-
-	public void set_yCoorBR(int _yCoorBR) {
-		this._yCoorBR = _yCoorBR;
 	}	
 	
 }

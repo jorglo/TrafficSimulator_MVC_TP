@@ -80,13 +80,6 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			int x2 = getWidth()-100;
 			int y2 = (i+1)*50;
 			
-			//DUDA: solucion buena?
-			// set de new position in the map by road.
-			r.getSrcJunc().set_xCoorBR(x1);
-			r.getSrcJunc().set_yCoorBR(y1);
-			r.getDestJunc().set_xCoorBR(x2);
-			r.getDestJunc().set_yCoorBR(y1);
-			
 			// draw a circle with center at (x,y) with radius _JRADIUS
 			g.setColor(_JUNCTION_COLOR);
 			g.fillOval(x1 - _JRADIUS / 2, y1 - _JRADIUS / 2, _JRADIUS, _JRADIUS);
@@ -120,7 +113,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 			//draw CO2
 			drawCO2(g,x2+60, y2, r);
 			
-			drawVehicles(g, r);
+			drawVehicles(g, r, x1, y1, x2, y2);
 			
 			i++;
 		}
@@ -185,7 +178,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 		
 	}
 	
-	private void drawVehicles(Graphics g, Road r2) {
+	private void drawVehicles(Graphics g, Road r2, int x1, int y1, int x2, int y2) {
 		for (Vehicle v : _map.getVehicles()) {
 			if (v.getStatus() != VehicleStatus.ARRIVED) {
 
@@ -194,10 +187,6 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 				// the location on the vehicle.
 				Road r = v.getRoad();
 				if(r == r2) {
-					int x1 = r.getSrcJunc().get_xCoorBR();
-					int y1 = r.getSrcJunc().get_yCoorBR();
-					int x2 = r.getDestJunc().get_xCoorBR();
-					int y2 = r.getDestJunc().get_yCoorBR();
 					double roadLength = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 					double alpha = Math.atan(((double) Math.abs(x1 - x2)) / ((double) Math.abs(y1 - y2)));
 					double relLoc = roadLength * ((double) v.getLocation()) / ((double) r.getLength());

@@ -12,8 +12,6 @@ import simulator.model.Event;
 import simulator.model.RoadMap;
 import simulator.model.TrafficSimObserver;
 
-
-//DUDA: Bien implementada??
 public class StatusBar extends JPanel implements TrafficSimObserver{
 	
 	private static final long serialVersionUID = 1L;

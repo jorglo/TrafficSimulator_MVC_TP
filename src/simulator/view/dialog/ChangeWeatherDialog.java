@@ -1,25 +1,20 @@
 package simulator.view.dialog;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
 import javax.swing.SpinnerNumberModel;
 
-import simulator.control.Controller;
-import simulator.misc.Pair;
-import simulator.model.Event;
-import simulator.model.NewSetWeatherEvent;
 import simulator.model.RoadMap;
 import simulator.model.Weather;
 
@@ -27,18 +22,18 @@ public class ChangeWeatherDialog extends JDialog{
 
 	private static final long serialVersionUID = 1L;
 	
-	private Controller _ctrl;
 	private RoadMap _map;
-	private int _ticks;
-	private int _time;
 
+	public static final int OK = 0;
+	public static final int CANCEL = 1;
+	private int res = -1;
+	
 	private JPanel dialogPanel;
 	private JPanel dialogPanelDescription;
-	private JPanel dialogPanelFeatures;
+	private JPanel dialogPanelSpinners;
 	private JPanel dialogPanelButtons;
 	
 	private JLabel jldescription;
-	private JLabel jldescription2;
 	private JLabel jlRoad;
 	private JLabel jlweather;
 	private JLabel jlTicks;
@@ -47,11 +42,10 @@ public class ChangeWeatherDialog extends JDialog{
 	private JSpinner spinnerWeather;
 	private JSpinner spinnerTicks;
 	
-    public ChangeWeatherDialog(Controller ctrl, RoadMap map, List<Event> events, int time) {
-    	_ctrl = ctrl;
-    	_map = map;
-    	_time = time;
-    	initGUI();     
+    public ChangeWeatherDialog(RoadMap map) {
+		super(new JFrame(), "Change CO2 Class", true);
+		_map = map;
+		initGUI();
     }
 
     private void initGUI() {
@@ -59,25 +53,18 @@ public class ChangeWeatherDialog extends JDialog{
     	//Instanciamos los paneles
     	dialogPanel = new JPanel();
     	dialogPanelDescription = new JPanel();
-    	dialogPanelFeatures = new JPanel();
-    	dialogPanelButtons = new JPanel();
+    	dialogPanelSpinners = new JPanel();
+    	dialogPanelButtons = new JPanel(new FlowLayout(FlowLayout.CENTER));
     	
-    	//declaramos su organizacion dentro de la ventana
-    	dialogPanel.setLayout(new BoxLayout(dialogPanel, BoxLayout.Y_AXIS));
-    	dialogPanelDescription.setLayout(new FlowLayout(FlowLayout.LEFT));
-    	dialogPanelFeatures.setLayout(new FlowLayout(FlowLayout.LEFT));
-    	dialogPanelButtons.setLayout(new FlowLayout(FlowLayout.CENTER));
+    	//añadimos los paneles internos
+    	dialogPanel.add(dialogPanelDescription,BorderLayout.NORTH);
+    	dialogPanel.add(dialogPanelSpinners,BorderLayout.CENTER);
+    	dialogPanel.add(dialogPanelButtons,BorderLayout.SOUTH);
     	
-    	//aï¿½adimos las caracteristicas
-    	dialogPanelDescription.setPreferredSize(new Dimension(390, 55));
-    	dialogPanelFeatures.setPreferredSize(new Dimension(390, 40));
+    	//anadimos las caracteristicas
+    	dialogPanelDescription.setPreferredSize(new Dimension(420, 55));
+    	dialogPanelSpinners.setPreferredSize(new Dimension(390, 40));
     	dialogPanelButtons.setPreferredSize(new Dimension(390, 40));
-    	
-    	//aï¿½adimos los paneles 
-    	this.setContentPane(dialogPanel);
-    	dialogPanel.add(dialogPanelDescription);
-    	dialogPanel.add(dialogPanelFeatures);
-    	dialogPanel.add(dialogPanelButtons);
     	
     	//aï¿½adimos los componentes de los Layauts
     	addDescription();
@@ -85,7 +72,7 @@ public class ChangeWeatherDialog extends JDialog{
     	addButtons();
     	
     	//caracteristicas de la caja dialog
-        setTitle("Change Weather Class");
+        this.setContentPane(dialogPanel);
         setLocation(300, 200);
         setResizable(false);
 		pack();
@@ -93,12 +80,9 @@ public class ChangeWeatherDialog extends JDialog{
 	}
 
 	private void addDescription() {
-		String text1 = "Schedule an event to change the weather of a road after a given number";
-		String text2 = "of simulation ticks from now.";
-		jldescription = new JLabel(text1);
-		jldescription2 = new JLabel(text2);
+		jldescription = new JLabel("<html><body> Schedule an event to change the weather of a road after a given"
+				+ " <br> number of simulation ticks from now. </body></html>");
 		dialogPanelDescription.add(jldescription);
-		dialogPanelDescription.add(jldescription2);
 	}
 
 	private void addFeatures() {
@@ -118,12 +102,12 @@ public class ChangeWeatherDialog extends JDialog{
 		spinnerTicks.setToolTipText("Ticks");
 		spinnerTicks.setPreferredSize(new Dimension(50, 20));
 		
-		dialogPanelFeatures.add(jlRoad);
-		dialogPanelFeatures.add(spinnerRoad);
-		dialogPanelFeatures.add(jlweather);
-		dialogPanelFeatures.add(spinnerWeather);
-		dialogPanelFeatures.add(jlTicks);
-		dialogPanelFeatures.add(spinnerTicks);
+		dialogPanelSpinners.add(jlRoad);
+		dialogPanelSpinners.add(spinnerRoad);
+		dialogPanelSpinners.add(jlweather);
+		dialogPanelSpinners.add(spinnerWeather);
+		dialogPanelSpinners.add(jlTicks);
+		dialogPanelSpinners.add(spinnerTicks);
 	}
 	
 	private void addButtons() {
@@ -132,6 +116,7 @@ public class ChangeWeatherDialog extends JDialog{
         JButton cancelButton = new JButton("Cancel");
         cancelButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent arg0) {
+        	res = CANCEL;
             dispose();
         	}
         });
@@ -143,31 +128,29 @@ public class ChangeWeatherDialog extends JDialog{
         JButton okButton = new JButton("OK");
         okButton.addActionListener(new ActionListener() {
         public void actionPerformed(ActionEvent e) {
-        	
-        	List<Pair<String, Weather>> contClass = new ArrayList<Pair<String,Weather>>();
-    		String first;
-    		Weather second;
-    		Pair<String, Weather> coche = null;
-    			
-    			first = spinnerRoad.getValue().toString();
-    			second = (Weather) spinnerWeather.getValue();
-    			
-    			coche = new Pair<String, Weather>(first, second);
- 
-    			contClass.add(coche);
-    			
-    			_ticks = (int)spinnerTicks.getValue();
-    			int newTime = _time + _ticks;
-    		
-    		//DUDA: se crea aqui el evento?	
-        	_ctrl.addEvent(new NewSetWeatherEvent(newTime, contClass));
+        	res = OK;
         	dispose();
         	}
         });
         
         okButton.setActionCommand("OK");
         dialogPanelButtons.add(okButton);
+	}
+	
+	public JSpinner getSpinnerRoad() {
+		return spinnerRoad;
+	}
 
+	public JSpinner getSpinnerWeather() {
+		return spinnerWeather;
+	}
+
+	public JSpinner getSpinnerTicks() {
+		return spinnerTicks;
+	}
+
+	public int getRes() {
+		return res;
 	}
 
 }
