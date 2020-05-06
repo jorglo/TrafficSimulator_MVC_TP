@@ -213,7 +213,6 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	    		
 	        	_ctrl.addEvent(new NewSetContClassEvent(newTime, contClass));
 			}
-   
 		}
 	}
 	

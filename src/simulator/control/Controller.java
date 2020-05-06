@@ -64,33 +64,33 @@ public class Controller {
 		} 
 	}
 	
-	/**
-	 * ejecutar la aplicacion con fichero de salida
-	 * @param n
-	 * @param out
-	 */
-	public void run(int n, OutputStream out) {
-		
-		JSONObject jo = new JSONObject();
-		JSONArray aux = new JSONArray();
-		JSONObject states = new JSONObject();		
-	
-		PrintWriter pw = new PrintWriter(out);
-		
-		for (int i = 0; i < n; i++) {
-			_trafficSim.advance();
-			jo = _trafficSim.report();
-			aux.put(jo);
-		} 
-		
-		states.put("states", aux);
-		
-		//String report = states.toString(); 
-		String report = states.toString(3); 
-		
-		pw.print(report); 	
-		pw.close();
-	}
+//	/**
+//	 * ejecutar la aplicacion con fichero de salida
+//	 * @param n
+//	 * @param out
+//	 */
+//	public void run(int n, OutputStream out) {
+//		
+//		JSONObject jo = new JSONObject();
+//		JSONArray aux = new JSONArray();
+//		JSONObject states = new JSONObject();		
+//	
+//		PrintWriter pw = new PrintWriter(out);
+//		
+//		for (int i = 0; i < n; i++) {
+//			_trafficSim.advance();
+//			jo = _trafficSim.report();
+//			aux.put(jo);
+//		} 
+//		
+//		states.put("states", aux);
+//		
+//		//String report = states.toString(); 
+//		String report = states.toString(3); 
+//		
+//		pw.print(report); 	
+//		pw.close();
+//	}
 	
 	/**
 	 * reset de los valores de la aplicacion
@@ -127,25 +127,25 @@ public class Controller {
 	
 	// METODO RUN PARA PRUEBAS CON FICHERO
 	
-//	public void run(int n, OutputStream out) {
-//		
-//		JSONObject jo = new JSONObject();
-//		JSONArray aux = new JSONArray();
-//	
-//		PrintWriter pw = new PrintWriter(out);
-//		
-//		pw.println("{");
-//		pw.println("  \"states\": [ ");
-//		
-//		for (int i = 0; i < n; i++) {
-//			_trafficSim.advance();
-//			jo = _trafficSim.report();
-//			pw.println(jo + ",");
-//		} 
-//		
-//		pw.println("]");
-//		pw.println("}");	
-//		pw.close();
-//	
-//	}
+	public void run(int n, OutputStream out) {
+		
+		JSONObject jo = new JSONObject();
+		JSONArray aux = new JSONArray();
+	
+		PrintWriter pw = new PrintWriter(out);
+		
+		pw.println("{");
+		pw.println("  \"states\": [ ");
+		
+		for (int i = 0; i < n; i++) {
+			_trafficSim.advance();
+			jo = _trafficSim.report();
+			pw.println(jo + ",");
+		} 
+		
+		pw.println("]");
+		pw.println("}");	
+		pw.close();
+	
+	}
 }

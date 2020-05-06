@@ -58,9 +58,11 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 			s = _map.getVehicles().get(rowIndex).getId();
 			break;
 		case 1:
-			String idRoad = _map.getVehicles().get(rowIndex).getRoad().getId();
-			int location = _map.getVehicles().get(rowIndex).getLocation();
-			s = idRoad + ":" + location;
+			if(_map.getVehicles().get(rowIndex).getRoad() != null) {
+				String idRoad = _map.getVehicles().get(rowIndex).getRoad().getId();
+				int location = _map.getVehicles().get(rowIndex).getLocation();
+				s = idRoad + ":" + location;
+			}
 			break;
 		case 2:
 			String text = "";
