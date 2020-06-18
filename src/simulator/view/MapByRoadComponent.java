@@ -43,7 +43,7 @@ public class MapByRoadComponent extends JPanel implements TrafficSimObserver{
 	}
 	
 	private void initGUI() {
-		_car = loadImage("resources/icons/car.png");
+		_car = loadImage("car.png");
 		setPreferredSize (new Dimension (300, 200));
 	}
 	
