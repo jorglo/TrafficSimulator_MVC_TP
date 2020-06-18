@@ -1,5 +1,7 @@
 package simulator.view;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -80,18 +82,14 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		jpToolBarQuit = new JPanel(); // Quit
 		
 		//declaramos su organizacion dentro del panel contenedor
-		jpToolBar.setLayout(new FlowLayout(FlowLayout.LEFT));
-		jpToolBarQuit.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
-		//anadimos las caracteristicas
-		jpToolBar.setPreferredSize(new Dimension(1100, 50));
+		this.setLayout(new BorderLayout());
 		
 		// anadimos los componentes
 		addToolBar();
 		
 		// anadimos paneles
-		this.add(jpToolBar);
-		this.add(jpToolBarQuit);
+		this.add(jpToolBar, BorderLayout.WEST);
+		this.add(jpToolBarQuit, BorderLayout.EAST);
 		this.setVisible(true);
 	}
 
@@ -102,27 +100,27 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		toolBar2.setFloatable(true);
 
 		// Creamos los botones con sus imagenes y caracteristicas
-		openButton = new JButton(new ImageIcon("icons/open.png"));
+		openButton = new JButton(new ImageIcon("resources/icons/open.png"));
 		openButton.setActionCommand(OPEN);
 		openButton.setToolTipText("Open a file");
 		openButton.addActionListener(this);
 		
-		co2classButton = new JButton(new ImageIcon("icons/co2class.png"));
+		co2classButton = new JButton(new ImageIcon("resources/icons/co2class.png"));
 		co2classButton.setActionCommand(CO2CLASS);
 		co2classButton.setToolTipText("CO2class");
 		co2classButton.addActionListener(this);
 		
-		weatherButton = new JButton(new ImageIcon("icons/weather.png"));
+		weatherButton = new JButton(new ImageIcon("resources/icons/weather.png"));
 		weatherButton.setActionCommand(WEATHER);
 		weatherButton.setToolTipText("Weather");
 		weatherButton.addActionListener(this);
 		
-		runButton = new JButton(new ImageIcon("icons/run.png"));
+		runButton = new JButton(new ImageIcon("resources/icons/run.png"));
 		runButton.setActionCommand(RUN);
 		runButton.setToolTipText("Run");
 		runButton.addActionListener(this);
 		
-		stopButton = new JButton(new ImageIcon("icons/stop.png"));
+		stopButton = new JButton(new ImageIcon("resources/icons/stop.png"));
 		stopButton.setActionCommand(STOP);
 		stopButton.setToolTipText("Stop");
 		stopButton.addActionListener(this);
@@ -133,7 +131,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		ticksSpinner.setPreferredSize(new Dimension(60, 30));
 		_ticks = (int) ticksSpinner.getValue();
 		
-		quitButton = new JButton(new ImageIcon("icons/exit.png"));
+		quitButton = new JButton(new ImageIcon("resources/icons/exit.png"));
 		quitButton.setActionCommand(QUIT);
 		quitButton.setToolTipText("Quit");
 		quitButton.addActionListener(this);
