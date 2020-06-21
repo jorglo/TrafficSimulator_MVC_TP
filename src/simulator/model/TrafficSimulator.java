@@ -36,9 +36,11 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 * avanza el estado de la simulacion
 	 */
 	public void advance(){
+		
 		_simulationTime++;
 		onAdvanceStart(_roadMap, _eventsList, _simulationTime);
 		executeEvents();
+		
 		try {
 			_roadMap.advanceJuntion(_simulationTime);
 			_roadMap.advanceRoad(_simulationTime);
@@ -56,7 +58,9 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	 * suma un vehiculo a map.
 	 */
 	private void executeEvents() {
+		
 		ArrayList<Event> eventsToRemove = new ArrayList<>();
+		
 		for (Event event : _eventsList) {
 			try {
 				if(event._time == _simulationTime) {
@@ -70,8 +74,10 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 				throw e;
 			}
 		}
+		
 		//elimina los eventos ejecutados
 		_eventsList.removeAll(eventsToRemove);
+	
 	}
 	
 	public void reset() {
@@ -81,7 +87,8 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 		onReset(_roadMap, _eventsList, _simulationTime);
 	}
 
-	public JSONObject report() {		
+	public JSONObject report() {	
+		
 		JSONObject simulator = new JSONObject();
 
 		simulator.put("time", _simulationTime);
@@ -105,8 +112,8 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	/* - INTERFACE TRAFFICOBSERVER - */
 	
 	/**
-	 * se invoca cuando se ejecuta el m�todo advance de TrafficSimulator, 
-	 * inmediatamente despu�s de incrementar el tiempo y antes de ejecutar los eventos.
+	 * se invoca cuando se ejecuta el metodo advance de TrafficSimulator, 
+	 * inmediatamente despues de incrementar el tiempo y antes de ejecutar los eventos.
 	 * 
 	 * @param map
 	 * @param events
@@ -145,7 +152,7 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	}
 	
 	/**
-	 * se invoca al final del m�todo reset (es decir, despu�s de hacer el reset).
+	 * se invoca al final del metodo reset (es decir, despues de hacer el reset).
 	 * 
 	 * @param map
 	 * @param events
@@ -171,9 +178,9 @@ public class TrafficSimulator implements Observable<TrafficSimObserver>{
 	/**
 	 * se invoca cuando ocurre un error. Cada vez que se lanza una excepci�n en la 
 	 * clase TrafficSimulator, primero se debe invocar onError(...) con el
-	 * correspondiente mensaje y posteriormente lanzar la excepci�n. Si se lanza una
-	 * excepci�n e en el m�todo advance de las carreteras y los cruces, se debe capturar en
-	 * TrafficSimulator , invocar onError con el mensaje e.getMessage() , y por �ltimo
+	 * correspondiente mensaje y posteriormente lanzar la excepcion. Si se lanza una
+	 * excepcion e en el metodo advance de las carreteras y los cruces, se debe capturar en
+	 * TrafficSimulator , invocar onError con el mensaje e.getMessage() , y por ultimo
 	 * volver a lanzarla.
 	 * 
 	 * @param err

@@ -1,9 +1,7 @@
 package simulator.view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -45,6 +43,7 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	private int _ticks;
 	private int _time;
 	
+	//JPANEL para los ToolBar
 	private JPanel jpToolBar;
 	private JPanel jpToolBarQuit;
 	
@@ -77,11 +76,11 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	public void initGUI() {
 		
-		//instanciamos el panel
+		// instanciamos el panel
 		jpToolBar = new JPanel(); // Open, CO2class, Weather, Run, Stop y Ticks
 		jpToolBarQuit = new JPanel(); // Quit
 		
-		//declaramos su organizacion dentro del panel contenedor
+		// definimos el tipo de layaut y organizacion que tendran los componentes dentro de cada panel
 		this.setLayout(new BorderLayout());
 		
 		// anadimos los componentes
@@ -136,7 +135,8 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		quitButton.setToolTipText("Quit");
 		quitButton.addActionListener(this);
 		
-		// a�adimos los botones al panel
+		// anadimos los botones al toolBar
+		//* toolBar-general
 		toolBar1.add(openButton);
 		toolBar1.add(co2classButton);
 		toolBar1.add(weatherButton);
@@ -144,8 +144,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 		toolBar1.add(stopButton);
 		toolBar1.add(stepsLabel);
 		toolBar1.add(ticksSpinner);
+		//* toolBar-quitButton
 		toolBar2.add(quitButton);
-	
+		
+		// anadimos los toolBar al panel
 		jpToolBar.add(toolBar1);
 		jpToolBarQuit.add(toolBar2);
 
@@ -156,6 +158,10 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 
 	//LISTA DE ACCIONES
+	/**
+	 * Recibe el evento del boton pulsado y llama 
+	 * a su metodo correspondiente para ejecutar la accion
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (OPEN.equals(e.getActionCommand()))
@@ -193,22 +199,27 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	/** Metodo para cambiar en CO2*/
 	private void co2class() {
+		//si no hay datos cargados no ejecuta
 		if(_map.getVehicles().size()!=0) {
 			
+			// crea a vista del pop up que anade un evento de contaminacion
 			ChangeCO2ClassDialog dialogCO2 = new ChangeCO2ClassDialog(_map);
 			
+			// controla que si NO se pulsa ok, resultado(res) no es 1 y no hace nada
 			if(dialogCO2.getRes() == 0) {
+				// creamos una lista igual al tipo del evento
 				List<Pair<String, Integer>> contClass = new ArrayList<Pair<String,Integer>>();
-    			
+				// cogemos el vehiculo
 	    		String first = dialogCO2.getSpinnerVehicle().getValue().toString();
+	    		// cogemos la contaminacion
 	    		Integer	second = (int) dialogCO2.getSpinnerCO2Class().getValue();
-	    			
+	    		// creamos el par vehicle-cont	
 	    		Pair<String, Integer> coche = new Pair<String, Integer>(first, second);
-	 
+	    		// anadimos el par vehicle-cont a la lista	
 	    		contClass.add(coche);
-	    			
+	    		// cogemos el tiempo del evento	
 	    		int newTime = _time + (int) dialogCO2.getSpinnerTicks().getValue();
-	    		
+	    		// creamos el evento
 	        	_ctrl.addEvent(new NewSetContClassEvent(newTime, contClass));
 			}
 		}
@@ -216,21 +227,29 @@ public class ControlPanel extends JPanel implements TrafficSimObserver, ActionLi
 	
 	/** Metodo para cabiar las CONDICIONES METEOROLOGICAS*/
 	private void weather() {
+		// si no hay datos cargados no ejecuta.
 		if(_map.getVehicles().size()!=0) {
+			
+			// crea la vista del pop up que anade un evento de condiciones meteorologicas
 			ChangeWeatherDialog dialogWeather = new ChangeWeatherDialog(_map);
 			
-			List<Pair<String, Weather>> contClass = new ArrayList<Pair<String,Weather>>();
-    		
-    		String first = dialogWeather.getSpinnerRoad().getValue().toString();
-    		Weather second = (Weather) dialogWeather.getSpinnerWeather().getValue();
-    			
-    		Pair<String, Weather> coche = new Pair<String, Weather>(first, second);
- 
-			contClass.add(coche);
-			
-			int newTime = _time + (int)dialogWeather.getSpinnerTicks().getValue();
-    		
-        	_ctrl.addEvent(new NewSetWeatherEvent(newTime, contClass));
+			// controla que si NO se pulsa ok, resultado(res) no es 1 y no hace nada
+			if(dialogWeather.getRes() == 0) {
+				// creamos una lista igual al tipo del evento
+				List<Pair<String, Weather>> WeatherList = new ArrayList<Pair<String,Weather>>();
+	    		// cogemos la carretera
+	    		String first = dialogWeather.getSpinnerRoad().getValue().toString();
+	    		// cogemos la condicion meteorologica
+	    		Weather second = (Weather) dialogWeather.getSpinnerWeather().getValue();
+	    		// creamos el par road-weather	
+	    		Pair<String, Weather> roadWeather = new Pair<String, Weather>(first, second);
+	    		// anadimos el par road-weather a la lista 
+	    		WeatherList.add(roadWeather);
+				// cogemos el tiempo del evento
+				int newTime = _time + (int)dialogWeather.getSpinnerTicks().getValue();
+	    		// creamos el evento
+	        	_ctrl.addEvent(new NewSetWeatherEvent(newTime, WeatherList));
+			}
 		}
 	}
 	

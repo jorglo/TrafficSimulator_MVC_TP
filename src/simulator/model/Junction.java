@@ -163,7 +163,7 @@ public class Junction extends SimulatedObject
 	}
 	
 	/**
-	 * A�ade el vehiculo v a la cola de la carretera r, 
+	 * Anade el vehiculo v a la cola de la carretera r, 
 	 * siendo r la carretera actual del vehiculo v.
 	 * @param r
 	 * @param v

@@ -15,12 +15,13 @@ import simulator.model.Vehicle;
 @SuppressWarnings("serial")
 public class JunctionsTableModel extends AbstractTableModel implements TrafficSimObserver{
 	
+	// atributos
 	private RoadMap _map;
-	
 	private String[] _columns = new String[] {
 			"Id", "Green", "Queues"
 	};
 	
+	// constructor
 	public JunctionsTableModel(Controller ctrl) {
 		ctrl.addObserver(this);
 	}
@@ -86,8 +87,7 @@ public class JunctionsTableModel extends AbstractTableModel implements TrafficSi
 	
 	public void update(RoadMap map) {
 		_map = map;
-		//avisamos al JPanel correspondiente el cambio de los datos.
-		fireTableDataChanged();
+		fireTableDataChanged();	//avisamos al JPanel correspondiente el cambio de los datos.
 	}
 
 	@Override

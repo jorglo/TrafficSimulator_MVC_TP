@@ -9,16 +9,18 @@ import simulator.model.Event;
 import simulator.model.Junction;
 import simulator.model.RoadMap;
 import simulator.model.TrafficSimObserver;
+import simulator.model.VehicleStatus;
 
 @SuppressWarnings("serial")
 public class VehiclesTableModel extends AbstractTableModel implements TrafficSimObserver{
 		
+	// atributos
 	private RoadMap _map;
-	
 	String[] _columns = new String[] {
 			"Id", "Location", "Itinerary", "CO2 Class", "Max.Speed", "Speed", "Total CO2", "Distance"
 	};
 	
+	// constructor
 	public VehiclesTableModel(Controller ctrl) {
 		ctrl.addObserver(this);
 	}
@@ -58,10 +60,22 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 			s = _map.getVehicles().get(rowIndex).getId();
 			break;
 		case 1:
-			if(_map.getVehicles().get(rowIndex).getRoad() != null) {
-				String idRoad = _map.getVehicles().get(rowIndex).getRoad().getId();
-				int location = _map.getVehicles().get(rowIndex).getLocation();
-				s = idRoad + ":" + location;
+			if(_map.getVehicles().get(rowIndex).getStatus().equals(VehicleStatus.PENDING)) {
+				s = "Pending";	
+			}
+			else if(_map.getVehicles().get(rowIndex).getStatus().equals(VehicleStatus.TRAVELING)) {
+				if(_map.getVehicles().get(rowIndex).getRoad() != null) {
+					String idRoad = _map.getVehicles().get(rowIndex).getRoad().getId();
+					int location = _map.getVehicles().get(rowIndex).getLocation();
+					s = idRoad + ":" + location;
+				}
+			}
+			else if(_map.getVehicles().get(rowIndex).getStatus().equals(VehicleStatus.WAITING)) {
+				String j = _map.getVehicles().get(rowIndex).getRoad().getDestJunc().getId();
+				s = "Waiting:" + j; 
+			}
+			else if(_map.getVehicles().get(rowIndex).getStatus().equals(VehicleStatus.ARRIVED)) {
+				s = "Arrived";
 			}
 			break;
 		case 2:
@@ -93,8 +107,7 @@ public class VehiclesTableModel extends AbstractTableModel implements TrafficSim
 	
 	public void update(RoadMap map) {
 		_map = map;
-		//avisamos al JPanel correspondiente el cambio de los datos.
-		fireTableDataChanged();
+		fireTableDataChanged(); //avisamos al JPanel correspondiente el cambio de los datos.
 	}
 
 	@Override

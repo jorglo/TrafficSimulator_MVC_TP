@@ -12,12 +12,13 @@ import simulator.model.TrafficSimObserver;
 @SuppressWarnings("serial")
 public class RoadsTableModel extends AbstractTableModel implements TrafficSimObserver{
 	
+	// atributos
 	private RoadMap _map;
-
 	String[] _columns = new String[] {
 			"Id", "Length", "weather", "Max. Speed", "Speed Limit", "Total CO2", "CO2 Limit"
 	};
 	
+	//constructor
 	public RoadsTableModel(Controller ctrl) {
 		ctrl.addObserver(this);
 	}
@@ -79,8 +80,7 @@ public class RoadsTableModel extends AbstractTableModel implements TrafficSimObs
 	
 	public void update(RoadMap map) {
 		_map = map;
-		//avisamos al JPanel correspondiente el cambio de los datos.
-		fireTableDataChanged();
+		fireTableDataChanged(); // avisamos al JPanel correspondiente el cambio de los datos.
 	}
 
 	@Override

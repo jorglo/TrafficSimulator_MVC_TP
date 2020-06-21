@@ -13,14 +13,15 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 	
 	private static final long serialVersionUID = 1L;
 
+	// atributos
 	private List<Event> _events; 
-	
 	private String[] _columns = new String[] {
 			"Time", "Desc." 
 	};
-
+	
+	// constructor
 	public EventsTableModel(Controller ctrl) {
-		ctrl.addObserver(this);
+		ctrl.addObserver(this);	// anadimos la tabla como observadora
 	}
 
 	@Override
@@ -66,8 +67,7 @@ public class EventsTableModel extends AbstractTableModel implements TrafficSimOb
 	
 	public void update(List<Event> events) {
 		_events = events;
-		//avisamos al JPanel correspondiente el cambio de los datos.
-		fireTableDataChanged();
+		fireTableDataChanged();	//avisamos al JPanel correspondiente el cambio de los datos.
 	}
 
 	@Override

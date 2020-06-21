@@ -72,7 +72,8 @@ public class Main {
 
 			// if there are some remaining arguments, then something wrong is
 			// provided in the command line!
-			//
+			// // si quedan algunos argumentos, entonces algo malo es
+			// ...en la línea de mando!
 			String[] remaining = line.getArgs();
 			if (remaining.length > 0) {
 				String error = "Illegal arguments:";
@@ -92,8 +93,7 @@ public class Main {
 		Options cmdLineOptions = new Options();
 
 		cmdLineOptions.addOption(Option.builder("i").longOpt("input").hasArg().desc("Events input file").build());
-		cmdLineOptions.addOption(
-				Option.builder("o").longOpt("output").hasArg().desc("Output file, where reports are written.").build());
+		cmdLineOptions.addOption(Option.builder("o").longOpt("output").hasArg().desc("Output file, where reports are written.").build());
 		cmdLineOptions.addOption(Option.builder("h").longOpt("help").desc("Print this message").build());
 		cmdLineOptions.addOption(Option.builder("t").longOpt("ticks").hasArg().desc("Ticks").build());
 		cmdLineOptions.addOption(Option.builder("m").longOpt("mode").hasArg().desc("Mode").build());
